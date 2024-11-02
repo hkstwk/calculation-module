@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  calculation-module:
+    image: mysql:latest
+    container_name: calculation-module-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: test
+      MYSQL_USER: test
+      MYSQL_PASSWORD: test
+      MYSQL_DATABASE: calculation-module-db
+    volumes:
+      - ~/Mysql/calculation-model-data:/var/lib/mysql  # Mounts a local directory for data persistence
+    ports:
+      - "3316:3306"  # Exposes MySQL on the default port
+    networks:
+      - calc-net
+
+networks:
+  calc-net:
+    driver: bridge
