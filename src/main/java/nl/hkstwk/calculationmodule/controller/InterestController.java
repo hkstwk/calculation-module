@@ -21,7 +21,7 @@ public class InterestController {
     private final InterestService interestService;
 
     @PostMapping("/compound")
-    public ResponseEntity<CompoundInterestResponseDto> compoundInterestCalculation(@RequestBody CompoundInterestRequestDto compoundInterestRequestDto){
+    public ResponseEntity<CompoundInterestResponseDto> compoundInterestCalculation(@RequestBody CompoundInterestRequestDto compoundInterestRequestDto) throws JsonProcessingException {
         log.info("Received request to calculate compound interest: {}", compoundInterestRequestDto);
         return ResponseEntity.ok(interestService.compoundInterestCalculation(compoundInterestRequestDto));
     }

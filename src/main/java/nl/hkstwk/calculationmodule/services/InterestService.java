@@ -7,6 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 import nl.hkstwk.calculationmodule.dto.CompoundInterestPeriodDetailDto;
 import nl.hkstwk.calculationmodule.dto.CompoundInterestRequestDto;
 import nl.hkstwk.calculationmodule.dto.CompoundInterestResponseDto;
+import nl.hkstwk.calculationmodule.entities.BaseRequest;
+import nl.hkstwk.calculationmodule.mappers.CompoundInterestMapper;
+import nl.hkstwk.calculationmodule.repositories.RequestRepository;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -19,8 +22,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class InterestService {
     private final ObjectMapper objectMapper;
+    private final CompoundInterestMapper compoundInterestMapper;
+    private final RequestRepository requestRepository;
 
-    public CompoundInterestResponseDto compoundInterestCalculation(CompoundInterestRequestDto compoundInterestRequestDto) {
+    public CompoundInterestResponseDto compoundInterestCalculation(CompoundInterestRequestDto compoundInterestRequestDto) throws JsonProcessingException {
         log.info("Start calculation compound interest for request: {}", compoundInterestRequestDto);
 
         BigDecimal principalSum = compoundInterestRequestDto.getOriginalPrincipalSum();
@@ -49,13 +54,16 @@ public class InterestService {
         return CompoundInterestResponseDto.builder().finalAmount(finalAmount).build();
     }
 
-    public CompoundInterestResponseDto compoundInterestCalculationWithDetails(CompoundInterestRequestDto request) throws JsonProcessingException {
-        log.info("Start calculation of compound interest with detailed results for request: {}", request);
+    public CompoundInterestResponseDto compoundInterestCalculationWithDetails(CompoundInterestRequestDto compoundInterestRequestDto) throws JsonProcessingException {
+        BaseRequest compoundInterestRequest = compoundInterestMapper.toEntity(compoundInterestRequestDto);
+        requestRepository.save(compoundInterestRequest);
 
-        BigDecimal principalSum = request.getOriginalPrincipalSum();
-        BigDecimal nominalAnnualInterestRate = request.getNominalAnnualInterestRate();
-        int compoundingFrequency = request.getCompoundingFrequency();
-        int time = request.getTime();
+        log.info("Start calculation of compound interest with detailed results for request: {}", compoundInterestRequestDto);
+
+        BigDecimal principalSum = compoundInterestRequestDto.getOriginalPrincipalSum();
+        BigDecimal nominalAnnualInterestRate = compoundInterestRequestDto.getNominalAnnualInterestRate();
+        int compoundingFrequency = compoundInterestRequestDto.getCompoundingFrequency();
+        int time = compoundInterestRequestDto.getTime();
 
         // Calculate the periodic nominalAnnualInterestRate
         BigDecimal periodicRate = nominalAnnualInterestRate.divide(BigDecimal.valueOf(compoundingFrequency), 10, RoundingMode.HALF_UP);

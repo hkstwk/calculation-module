@@ -4,10 +4,16 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.hkstwk.calculationmodule.dto.CompoundInterestRequestDto;
 import nl.hkstwk.calculationmodule.dto.CompoundInterestResponseDto;
+import nl.hkstwk.calculationmodule.mappers.CompoundInterestMapper;
+import nl.hkstwk.calculationmodule.repositories.RequestRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -16,12 +22,20 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
+@ExtendWith(MockitoExtension.class)
 class InterestServiceTest {
+    @InjectMocks
     private InterestService interestService;
+    @Mock
+    private CompoundInterestMapper compoundInterestMapper;
+    @Mock
+    private RequestRepository requestRepository;
+    @Mock
+    private ObjectMapper objectMapper;
 
     @BeforeEach
-    public void setUp() {
-        interestService = new InterestService(new ObjectMapper());
+    void setUp() {
+        objectMapper = new ObjectMapper();
     }
 
     public static Stream<Arguments> compoundInterestCalculatorInput(){
@@ -38,7 +52,7 @@ class InterestServiceTest {
 
     @ParameterizedTest
     @MethodSource("compoundInterestCalculatorInput")
-    public void testCompoundInterestCalculator(int time, int frequency, double nominalInterest, double originalPrincipalSum, double accumulatedValue) {
+    public void testCompoundInterestCalculator(int time, int frequency, double nominalInterest, double originalPrincipalSum, double accumulatedValue) throws JsonProcessingException {
         CompoundInterestRequestDto request = CompoundInterestRequestDto.builder()
                 .time(time)
                 .originalPrincipalSum(BigDecimal.valueOf(originalPrincipalSum))

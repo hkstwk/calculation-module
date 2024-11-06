@@ -4,7 +4,23 @@
                    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                    https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
-    <changeSet id="0" author="admin">
+    <changeSet id="1" author="harm kolvoort">
+        <createTable tableName="requests">
+            <column name="id" type="varchar(36)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="type" type="varchar(50)"/>
+            <column name="date_created" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_updated" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="data" type="mediumtext"/>
+        </createTable>
 
+        <createIndex tableName="requests" indexName="idx_type">
+            <column name="type"/>
+        </createIndex>
     </changeSet>
 </databaseChangeLog>
