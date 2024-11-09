@@ -4,8 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.hkstwk.calculationmodule.dto.CompoundInterestRequestDto;
 import nl.hkstwk.calculationmodule.dto.CompoundInterestResponseDto;
-import nl.hkstwk.calculationmodule.mappers.CompoundInterestMapper;
-import nl.hkstwk.calculationmodule.repositories.RequestRepository;
+import nl.hkstwk.calculationmodule.dto.CompoundInterestWithDetailsResponseDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -26,10 +25,7 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 class InterestServiceTest {
     @InjectMocks
     private InterestService interestService;
-    @Mock
-    private CompoundInterestMapper compoundInterestMapper;
-    @Mock
-    private RequestRepository requestRepository;
+
     @Mock
     private ObjectMapper objectMapper;
 
@@ -75,7 +71,7 @@ class InterestServiceTest {
                 .nominalAnnualInterestRate(BigDecimal.valueOf(nominalInterest))
                 .build();
 
-        CompoundInterestResponseDto responseDto = interestService.compoundInterestCalculationWithDetails(request);
+        CompoundInterestWithDetailsResponseDto responseDto = interestService.compoundInterestCalculationWithDetails(request);
 
         assertThat(responseDto.getFinalAmount()).isEqualTo(BigDecimal.valueOf(accumulatedValue).setScale(2, RoundingMode.HALF_UP));
         assertThat(responseDto.getDetailedPeriods()).hasSize(time*frequency);

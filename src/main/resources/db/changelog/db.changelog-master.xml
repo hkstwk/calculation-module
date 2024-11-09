@@ -23,4 +23,23 @@
             <column name="type"/>
         </createIndex>
     </changeSet>
+
+    <changeSet id="1731178622960-1" author="Harm Kolvoort">
+        <createTable tableName="calculation_request">
+            <column name="id" type="varchar(36)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="calculation_type" type="varchar(50)"/>
+            <column name="request_data" type="mediumtext"/>
+            <column name="date_created" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_updated" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <createIndex tableName="calculation_request" indexName="idx_calculation_type">
+            <column name="calculation_type"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>

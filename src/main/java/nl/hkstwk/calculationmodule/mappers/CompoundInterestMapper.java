@@ -4,8 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import nl.hkstwk.calculationmodule.dto.CompoundInterestRequestDto;
-import nl.hkstwk.calculationmodule.entities.BaseRequest;
-import nl.hkstwk.calculationmodule.entities.CompoundInterestRequest;
+import nl.hkstwk.calculationmodule.entities.CalculationRequestEntity;
+import nl.hkstwk.calculationmodule.enums.CalculationTypeEnum;
+import nl.hkstwk.calculationmodule.exceptions.DtoNotFoundException;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
@@ -15,33 +16,35 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class CompoundInterestMapper {
     // Mapping between `type` values and DTO classes
-    private static final Map<String, Class<?>> dtoTypeMap = new HashMap<>();
+    private static final Map<CalculationTypeEnum, Class<?>> dtoTypeMap = new HashMap<>();
 
     static {
-        dtoTypeMap.put("CompoundInterest", CompoundInterestRequestDto.class);
+        dtoTypeMap.put(CalculationTypeEnum.COMPOUND_INTEREST, CompoundInterestRequestDto.class);
         // Add other mappings as needed
     }
 
     private final ObjectMapper objectMapper;
 
-    public CompoundInterestRequest toEntity(CompoundInterestRequestDto requestDto) throws JsonProcessingException {
-        CompoundInterestRequest compoundInterestRequest = new CompoundInterestRequest();
+    public CalculationRequestEntity toEntity(CompoundInterestRequestDto requestDto, CalculationTypeEnum calculationType) throws JsonProcessingException {
+        CalculationRequestEntity calculationRequestEntity = new CalculationRequestEntity();
 
         String data = objectMapper.writeValueAsString(requestDto);
-        compoundInterestRequest.setData(data);
+        calculationRequestEntity.setRequestData(data);
+        calculationRequestEntity.setCalculationType(calculationType);
 
-        return compoundInterestRequest;
+        return calculationRequestEntity;
     }
 
-    public Object toDto(BaseRequest entity) {
-        String type = entity.getType();
-        String data = entity.getData();
+    public Object toDto(CalculationRequestEntity calculationRequestEntity) {
+        CalculationTypeEnum calculationType = calculationRequestEntity.getCalculationType();
+        String requestData = calculationRequestEntity.getRequestData();
 
-        Class<?> dtoClass = dtoTypeMap.get(type);
+        Class<?> dtoClass = dtoTypeMap.get(calculationType);
+
         if (dtoClass != null) {
-            return objectMapper.convertValue(data, dtoClass);
+            return objectMapper.convertValue(requestData, dtoClass);
         }
 
-        throw new IllegalArgumentException("Unsupported request type: " + type);
+        throw new DtoNotFoundException("Unsupported calculation request type '%s'".formatted(calculationType));
     }
 }

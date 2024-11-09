@@ -12,4 +12,5 @@ public class CompoundInterestRequestDto {
     BigDecimal nominalAnnualInterestRate;
     int compoundingFrequency;
     int time;
+    boolean showDetails;
 }
