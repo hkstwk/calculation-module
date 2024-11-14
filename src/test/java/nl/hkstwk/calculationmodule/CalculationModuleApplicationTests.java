@@ -8,6 +8,7 @@ class CalculationModuleApplicationTests {
 
     @Test
     void contextLoads() {
+
     }
 
 }

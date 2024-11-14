@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import nl.hkstwk.calculationmodule.dto.CompoundInterestRequestDto;
+import nl.hkstwk.calculationmodule.dto.CompoundInterestWithDetailsResponseDto;
 import nl.hkstwk.calculationmodule.entities.CalculationRequestEntity;
 import nl.hkstwk.calculationmodule.enums.CalculationTypeEnum;
 import nl.hkstwk.calculationmodule.exceptions.DtoNotFoundException;
@@ -20,6 +21,7 @@ public class CompoundInterestMapper {
 
     static {
         dtoTypeMap.put(CalculationTypeEnum.COMPOUND_INTEREST, CompoundInterestRequestDto.class);
+        dtoTypeMap.put(CalculationTypeEnum.COMPOUND_INTEREST_WITH_DETAILS, CompoundInterestWithDetailsResponseDto.class);
         // Add other mappings as needed
     }
 
@@ -38,6 +40,10 @@ public class CompoundInterestMapper {
     public Object toDto(CalculationRequestEntity calculationRequestEntity) {
         CalculationTypeEnum calculationType = calculationRequestEntity.getCalculationType();
         String requestData = calculationRequestEntity.getRequestData();
+
+        if (calculationRequestEntity.getRequestData() == null) {
+            throw new IllegalArgumentException("Calculation request data is null");
+        }
 
         Class<?> dtoClass = dtoTypeMap.get(calculationType);
 
