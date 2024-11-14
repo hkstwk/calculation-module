@@ -50,7 +50,7 @@ public class InterestService {
         return CompoundInterestResponseDto.builder().finalAmount(finalAmount).build();
     }
 
-    public CompoundInterestWithDetailsResponseDto compoundInterestCalculationWithDetails(CompoundInterestRequestDto compoundInterestRequestDto) throws JsonProcessingException {
+    public CompoundInterestWithDetailsResponseDto compoundInterestWithDetailsCalculation(CompoundInterestRequestDto compoundInterestRequestDto) throws JsonProcessingException {
         log.info("Start calculation of compound interest with detailed results for request: {}", compoundInterestRequestDto);
 
         BigDecimal principalSum = compoundInterestRequestDto.getOriginalPrincipalSum();

@@ -46,7 +46,7 @@ public class InterestController {
         CalculationRequestEntity savedEntity = calculationRequestService.saveRequest(compoundInterestMapper.toEntity(compoundInterestRequestDto, CalculationTypeEnum.COMPOUND_INTEREST_WITH_DETAILS));
         log.info("Request info saved with id {}", savedEntity.getId());
 
-        return ResponseEntity.ok(interestService.compoundInterestCalculationWithDetails(compoundInterestRequestDto));
+        return ResponseEntity.ok(interestService.compoundInterestWithDetailsCalculation(compoundInterestRequestDto));
     }
 
 }
