@@ -71,7 +71,7 @@ class InterestServiceTest {
                 .nominalAnnualInterestRate(BigDecimal.valueOf(nominalInterest))
                 .build();
 
-        CompoundInterestWithDetailsResponseDto responseDto = interestService.compoundInterestCalculationWithDetails(request);
+        CompoundInterestWithDetailsResponseDto responseDto = interestService.compoundInterestWithDetailsCalculation(request);
 
         assertThat(responseDto.getFinalAmount()).isEqualTo(BigDecimal.valueOf(accumulatedValue).setScale(2, RoundingMode.HALF_UP));
         assertThat(responseDto.getDetailedPeriods()).hasSize(time*frequency);
