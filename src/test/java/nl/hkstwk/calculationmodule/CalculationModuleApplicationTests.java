@@ -1,16 +1,23 @@
 package nl.hkstwk.calculationmodule;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.context.ApplicationContext;
+import org.springframework.test.context.ActiveProfiles;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+@ActiveProfiles("dev")
 @SpringBootTest
-@TestPropertySource(properties = "spring.datasource.driverClassName=org.h2.Driver")
 class CalculationModuleApplicationTests {
+
+    @Autowired
+    private ApplicationContext applicationContext;
 
     @Test
     void contextLoads() {
-
+        assertNotNull(applicationContext);
     }
 
 }
