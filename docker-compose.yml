@@ -2,6 +2,7 @@ services:
   calculation-module:
     image: mysql:latest
     container_name: calculation-module-mysql
+    platform: linux/amd64
     environment:
       MYSQL_ROOT_PASSWORD: test
       MYSQL_USER: test
@@ -10,7 +11,18 @@ services:
     volumes:
       - ~/Mysql/calculation-model-data:/var/lib/mysql  # Mounts a local directory for data persistence
     ports:
-      - "3316:3306"  # Exposes MySQL on the default port
+      - "3316:3306"
+    networks:
+      - calc-net
+  calculation-module-application:
+    image: hkstwk/calculation-module:latest
+    container_name: calculation-module-app
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_DATASOURCE_URL=jdbc:mysql://calculation-module:3306/calculation-module-db
+    platform: linux/amd64
+    ports:
+      - "8081:8080"
     networks:
       - calc-net
 
