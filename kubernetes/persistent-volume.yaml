@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: calculation-model-data-pv
+spec:
+  capacity:
+    storage: 5Gi # Specify the size of your volume
+  accessModes:
+    - ReadWriteOnce
+  hostPath: # Maps to the host machine directory
+    path: /Users/harm/Mysql/calculation-model-data

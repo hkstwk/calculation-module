@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: calculation-module-mysql
+  name: calculation-module-mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: calculation-module-mysql
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: calculation-module-mysql
+    spec:
+      containers:
+      - image: mysql:latest
+        name: mysql
+        resources: {}
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            value: test
+          - name: MYSQL_USER
+            value: test
+          - name: MYSQL_PASSWORD
+            value: test
+          - name: MYSQL_DATABASE
+            value: calculation-module-db
+#        volumeMounts:
+#          - mountPath: /var/lib/mysql
+#            name: mysql-data
+#      volumes:
+#        - name: mysql-data
+#          persistentVolumeClaim:
+#            claimName: calculation-model-data-pvc
+status: {}
