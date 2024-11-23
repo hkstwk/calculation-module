@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - image: mysql:latest
-        name: mysql
+        name: calculation-module-mysql
         resources: {}
         env:
           - name: MYSQL_ROOT_PASSWORD
@@ -31,7 +31,7 @@ spec:
           - name: MYSQL_DATABASE
             value: calculation-module-db
 #        volumeMounts:
-#          - mountPath: /var/lib/mysql
+#          - mountPath: "/var/lib/mysql"
 #            name: mysql-data
 #      volumes:
 #        - name: mysql-data

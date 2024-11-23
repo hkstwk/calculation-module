@@ -8,4 +8,5 @@ spec:
   accessModes:
     - ReadWriteOnce
   hostPath: # Maps to the host machine directory
-    path: /Users/harm/Mysql/calculation-model-data
+    path: "/Users/harm/Mysql/calculation-model-data"
+    type: Directory

@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: calculation-module
+  name: calculation-module
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: calculation-module
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: calculation-module
+    spec:
+      containers:
+      - image: hkstwk/calculation-module:latest
+        name: calculation-module
+        resources: {}
+        env:
+          - name: SPRING_PROFILES_ACTIVE
+            value: dev
+          - name: SPRING_DATASOURCE_URL
+            value: jdbc:mysql://localhost:32010/calculation-module-db
+          - name: SERVER_PORT
+            value: '8080'
+status: {}

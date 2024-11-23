@@ -3,17 +3,17 @@ kind: Service
 metadata:
   creationTimestamp: null
   labels:
-    app: mysql
-  name: mysql
+    app: calculation-module-mysql
+  name: calculation-module-mysql
 spec:
   ports:
   - name: 3306-3306
     port: 3306
     protocol: TCP
     targetPort: 3306
-    nodePort: 32000
+    nodePort: 32001
   selector:
-    app: mysql
+    app: calculation-module-mysql
   type: NodePort
 status:
   loadBalancer: {}
