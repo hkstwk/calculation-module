@@ -9,20 +9,23 @@ on:
       - master
 
 jobs:
-  test:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Set up JDK 21
-      uses: actions/setup-java@v1
-      with:
-        java-version: '21'
+      - name: Set up JDK 21
+        uses: actions/setup-java@v1
+        with:
+          java-version: '21'
 
-    - name: Build with Maven
-      run: mvn clean install
+      # Build step
+      - name: Build with Maven
+        run: mvn clean compile
 
-    - name: Run tests
-      run: mvn test
+      # Test step, runs only if the build succeeds
+      - name: Run tests
+        run: mvn test
+        if: success() # Ensures this step only runs if the previous step was successful
