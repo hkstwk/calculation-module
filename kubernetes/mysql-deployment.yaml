@@ -1,7 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  creationTimestamp: null
   labels:
     app: calculation-module-mysql
   name: calculation-module-mysql
@@ -13,7 +12,6 @@ spec:
   strategy: {}
   template:
     metadata:
-      creationTimestamp: null
       labels:
         app: calculation-module-mysql
     spec:
@@ -30,11 +28,10 @@ spec:
             value: test
           - name: MYSQL_DATABASE
             value: calculation-module-db
-#        volumeMounts:
-#          - mountPath: "/var/lib/mysql"
-#            name: mysql-data
-#      volumes:
-#        - name: mysql-data
-#          persistentVolumeClaim:
-#            claimName: calculation-model-data-pvc
-status: {}
+        volumeMounts:
+          - mountPath: "/var/lib/mysql"
+            name: mysql-data
+      volumes:
+        - name: mysql-data
+          persistentVolumeClaim:
+            claimName: calculation-model-data-pvc

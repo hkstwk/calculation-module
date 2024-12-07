@@ -1,7 +1,6 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  creationTimestamp: null
   labels:
     app: calculation-module
   name: calculation-module
@@ -13,7 +12,6 @@ spec:
   strategy: {}
   template:
     metadata:
-      creationTimestamp: null
       labels:
         app: calculation-module
     spec:
@@ -25,7 +23,6 @@ spec:
           - name: SPRING_PROFILES_ACTIVE
             value: dev
           - name: SPRING_DATASOURCE_URL
-            value: jdbc:mysql://localhost:32010/calculation-module-db
+            value: jdbc:mysql://calculation-module-mysql:3306/calculation-module-db
           - name: SERVER_PORT
             value: '8080'
-status: {}
