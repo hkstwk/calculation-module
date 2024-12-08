@@ -25,7 +25,12 @@ jobs:
       - name: Build with Maven
         run: mvn clean compile
 
-      # Test step, runs only if the build succeeds
-      - name: Run tests
+      # Unit tests step
+      - name: Run unit tests
         run: mvn test
-        if: success() # Ensures this step only runs if the previous step was successful
+        if: success()
+
+      # Integration tests step
+      - name: Run integration tests
+        run: mvn failsafe:integration-test
+        if: success()
