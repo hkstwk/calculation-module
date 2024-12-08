@@ -1,0 +1,6 @@
+{
+  "nominalAnnualInterestRate": "must not be null",
+  "time": "must be greater than or equal to 1",
+  "originalPrincipalSum": "must be greater than 0",
+  "compoundingFrequency": "must be greater than or equal to 1"
+}

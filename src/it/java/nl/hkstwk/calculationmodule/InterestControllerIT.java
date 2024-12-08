@@ -29,6 +29,20 @@ public class InterestControllerIT extends AbstractIT {
     }
 
     @Test
+    void testCompoundInterestWithInvalidRequest() throws Exception {
+        Path directoryPath = Paths.get(ResourceUtils.getFile(jsonDirectory).toURI());
+
+        String inputJson = Files.readString(directoryPath.resolve("CompoundInterestInvalidRequest.json"));
+        String outputJson = Files.readString(directoryPath.resolve("BadRequestResponse.json"));
+
+        mockMvc.perform(post("/interest/compound")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(inputJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().json(outputJson));
+    }
+
+    @Test
     void testCompoundInterestWithDetails() throws Exception {
         Path directoryPath = Paths.get(ResourceUtils.getFile(jsonDirectory).toURI());
 

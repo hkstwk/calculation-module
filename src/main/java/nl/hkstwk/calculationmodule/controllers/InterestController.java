@@ -1,6 +1,7 @@
 package nl.hkstwk.calculationmodule.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import nl.hkstwk.calculationmodule.dto.CompoundInterestRequestDto;
@@ -28,7 +29,7 @@ public class InterestController {
     private final CompoundInterestMapper compoundInterestMapper;
 
     @PostMapping("/compound")
-    public ResponseEntity<CompoundInterestResponseDto> compoundInterestCalculation(@RequestBody CompoundInterestRequestDto compoundInterestRequestDto) throws JsonProcessingException {
+    public ResponseEntity<CompoundInterestResponseDto> compoundInterestCalculation(@Valid @RequestBody CompoundInterestRequestDto compoundInterestRequestDto) throws JsonProcessingException {
         log.info("Received request to calculate compound interest: {}", compoundInterestRequestDto);
 
         log.info("Saving request info ...");
@@ -39,7 +40,7 @@ public class InterestController {
     }
 
     @PostMapping("/compound-with-details")
-    public ResponseEntity<CompoundInterestWithDetailsResponseDto> compoundInterestWithDetailsCalculation(@RequestBody CompoundInterestRequestDto compoundInterestRequestDto) throws JsonProcessingException {
+    public ResponseEntity<CompoundInterestWithDetailsResponseDto> compoundInterestWithDetailsCalculation(@Valid @RequestBody CompoundInterestRequestDto compoundInterestRequestDto) throws JsonProcessingException {
         log.info("Received request to calculate compound interest: {}", compoundInterestRequestDto);
 
         log.info("Saving request info ...");
@@ -48,5 +49,4 @@ public class InterestController {
 
         return ResponseEntity.ok(interestService.compoundInterestWithDetailsCalculation(compoundInterestRequestDto));
     }
-
 }
