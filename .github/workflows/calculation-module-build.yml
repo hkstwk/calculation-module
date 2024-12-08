@@ -32,5 +32,5 @@ jobs:
 
       # Integration tests step
       - name: Run integration tests
-        run: mvn -B failsafe:verify
+        run: mvn -B failsafe:verify -f pom.xml
         if: success()
