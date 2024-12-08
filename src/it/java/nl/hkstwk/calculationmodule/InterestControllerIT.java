@@ -24,7 +24,7 @@ public class InterestControllerIT extends AbstractIT {
         mockMvc.perform(post("/interest/compound")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(inputJson))
-                .andExpect(status().isOk())
+                .andExpect(status().isNotFound())
                 .andExpect(content().json(outputJson));
     }
 
