@@ -1,10 +1,6 @@
 {
-  "originalPrincipalSum": 100,
-  "nominalAnnualInterestRate": 0.04,
-  "compoundingFrequency": 12,
-  "time": 1,
   "finalAmount": 104.07,
-  "detailedPeriods": [
+  "details": [
     {
       "periodNumber": 1,
       "startingAmount": 100.00,

@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 
 @Data
 @Builder
-public class CompoundInterestPeriodDetailDto {
+public class CompoundInterestDetailsDto {
     private int periodNumber;
     private BigDecimal startingAmount;
     private BigDecimal interestForPeriod;

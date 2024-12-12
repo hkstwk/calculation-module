@@ -22,5 +22,5 @@ public class CompoundInterestRequestDto {
     @NotNull
     @Min(1)
     int time;
-    boolean showDetails;
+    boolean includeDetails;
 }

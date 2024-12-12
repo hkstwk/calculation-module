@@ -1,25 +1,22 @@
 package nl.hkstwk.calculationmodule;
 
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import org.springframework.util.ResourceUtils;
 
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Slf4j
 public class InterestControllerIT extends AbstractIT {
 
     @Test
     void testCompoundInterest() throws Exception {
-        Path directoryPath = Paths.get(ResourceUtils.getFile(jsonDirectory).toURI());
-
-        String inputJson = Files.readString(directoryPath.resolve("CompoundInterestRequest.json"));
-        String outputJson = Files.readString(directoryPath.resolve("CompoundInterestResponse.json"));
+        String inputJson = Files.readString(requestDirectory.resolve("CompoundInterestRequestNoDetails.json"));
+        String outputJson = Files.readString(responseDirectory.resolve("CompoundInterestResponse.json"));
 
         mockMvc.perform(post("/interest/compound")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -30,10 +27,8 @@ public class InterestControllerIT extends AbstractIT {
 
     @Test
     void testCompoundInterestWithInvalidRequest() throws Exception {
-        Path directoryPath = Paths.get(ResourceUtils.getFile(jsonDirectory).toURI());
-
-        String inputJson = Files.readString(directoryPath.resolve("CompoundInterestInvalidRequest.json"));
-        String outputJson = Files.readString(directoryPath.resolve("BadRequestResponse.json"));
+        String inputJson = Files.readString(requestDirectory.resolve("CompoundInterestInvalidRequest.json"));
+        String outputJson = Files.readString(responseDirectory.resolve("BadRequestResponse.json"));
 
         mockMvc.perform(post("/interest/compound")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -44,12 +39,10 @@ public class InterestControllerIT extends AbstractIT {
 
     @Test
     void testCompoundInterestWithDetails() throws Exception {
-        Path directoryPath = Paths.get(ResourceUtils.getFile(jsonDirectory).toURI());
+        String inputJson = Files.readString(requestDirectory.resolve("CompoundInterestRequestIncludeDetails.json"));
+        String outputJson = Files.readString(responseDirectory.resolve("CompoundInterestWithDetailsResponse.json"));
 
-        String inputJson = Files.readString(directoryPath.resolve("CompoundInterestRequest.json"));
-        String outputJson = Files.readString(directoryPath.resolve("CompoundInterestWithDetailsResponse.json"));
-
-        mockMvc.perform(post("/interest/compound-with-details")
+        mockMvc.perform(post("/interest/compound")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(inputJson))
                 .andExpect(status().isOk())

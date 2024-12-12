@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.hkstwk.calculationmodule.dto.CompoundInterestRequestDto;
 import nl.hkstwk.calculationmodule.dto.CompoundInterestResponseDto;
-import nl.hkstwk.calculationmodule.dto.CompoundInterestWithDetailsResponseDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -54,6 +53,7 @@ class InterestServiceTest {
                 .originalPrincipalSum(BigDecimal.valueOf(originalPrincipalSum))
                 .compoundingFrequency(frequency)
                 .nominalAnnualInterestRate(BigDecimal.valueOf(nominalInterest))
+                .includeDetails(false)
                 .build();
 
         CompoundInterestResponseDto responseDto = interestService.compoundInterestCalculation(request);
@@ -69,11 +69,12 @@ class InterestServiceTest {
                 .originalPrincipalSum(BigDecimal.valueOf(originalPrincipalSum))
                 .compoundingFrequency(frequency)
                 .nominalAnnualInterestRate(BigDecimal.valueOf(nominalInterest))
+                .includeDetails(true)
                 .build();
 
-        CompoundInterestWithDetailsResponseDto responseDto = interestService.compoundInterestWithDetailsCalculation(request);
+        CompoundInterestResponseDto responseDto = interestService.compoundInterestCalculation(request);
 
         assertThat(responseDto.getFinalAmount()).isEqualTo(BigDecimal.valueOf(accumulatedValue).setScale(2, RoundingMode.HALF_UP));
-        assertThat(responseDto.getDetailedPeriods()).hasSize(time*frequency);
+        assertThat(responseDto.getDetails()).hasSize(time*frequency);
     }
 }

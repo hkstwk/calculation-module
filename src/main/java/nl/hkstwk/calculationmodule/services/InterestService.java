@@ -2,12 +2,12 @@ package nl.hkstwk.calculationmodule.services;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import nl.hkstwk.calculationmodule.dto.CompoundInterestPeriodDetailDto;
+import nl.hkstwk.calculationmodule.dto.CompoundInterestDetailsDto;
 import nl.hkstwk.calculationmodule.dto.CompoundInterestRequestDto;
 import nl.hkstwk.calculationmodule.dto.CompoundInterestResponseDto;
-import nl.hkstwk.calculationmodule.dto.CompoundInterestWithDetailsResponseDto;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -21,7 +21,7 @@ import java.util.List;
 public class InterestService {
     private final ObjectMapper objectMapper;
 
-    public CompoundInterestResponseDto compoundInterestCalculation(CompoundInterestRequestDto compoundInterestRequestDto) {
+    public CompoundInterestResponseDto compoundInterestCalculationNoDetails(CompoundInterestRequestDto compoundInterestRequestDto) {
         log.info("Start calculation compound interest for request: {}", compoundInterestRequestDto);
 
         BigDecimal principalSum = compoundInterestRequestDto.getOriginalPrincipalSum();
@@ -50,7 +50,7 @@ public class InterestService {
         return CompoundInterestResponseDto.builder().finalAmount(finalAmount).build();
     }
 
-    public CompoundInterestWithDetailsResponseDto compoundInterestWithDetailsCalculation(CompoundInterestRequestDto compoundInterestRequestDto) throws JsonProcessingException {
+    public CompoundInterestResponseDto compoundInterestCalculationWithDetails(CompoundInterestRequestDto compoundInterestRequestDto) throws JsonProcessingException {
         log.info("Start calculation of compound interest with detailed results for request: {}", compoundInterestRequestDto);
 
         BigDecimal principalSum = compoundInterestRequestDto.getOriginalPrincipalSum();
@@ -64,7 +64,7 @@ public class InterestService {
 
         int totalPeriods = compoundingFrequency * time;
         BigDecimal accumulatedValue = principalSum;
-        List<CompoundInterestPeriodDetailDto> periodDetails = new ArrayList<>();
+        List<CompoundInterestDetailsDto> periodDetails = new ArrayList<>();
 
         // Iterate through each compounding period to collect details
         for (int period = 1; period <= totalPeriods; period++) {
@@ -72,7 +72,7 @@ public class InterestService {
             accumulatedValue = accumulatedValue.add(interestForPeriod).setScale(10, RoundingMode.HALF_UP);
 
             // Capture details for the current period
-            CompoundInterestPeriodDetailDto periodDetail = CompoundInterestPeriodDetailDto.builder()
+            CompoundInterestDetailsDto periodDetail = CompoundInterestDetailsDto.builder()
                     .periodNumber(period)
                     .startingAmount(accumulatedValue.subtract(interestForPeriod).setScale(2, RoundingMode.HALF_UP))
                     .interestForPeriod(interestForPeriod.setScale(2, RoundingMode.HALF_UP))
@@ -85,13 +85,9 @@ public class InterestService {
         BigDecimal finalAmount = accumulatedValue.setScale(2, RoundingMode.HALF_UP);
 
         // Build response with full details
-        CompoundInterestWithDetailsResponseDto response = CompoundInterestWithDetailsResponseDto.builder()
-                .originalPrincipalSum(principalSum)
-                .nominalAnnualInterestRate(nominalAnnualInterestRate)
-                .compoundingFrequency(compoundingFrequency)
-                .time(time)
+        CompoundInterestResponseDto response = CompoundInterestResponseDto.builder()
                 .finalAmount(finalAmount)
-                .detailedPeriods(periodDetails)
+                .details(periodDetails)
                 .build();
 
         log.info("Final accumulated value after {} periods: {}", totalPeriods, finalAmount);
@@ -99,5 +95,8 @@ public class InterestService {
         return response;
     }
 
+    public CompoundInterestResponseDto compoundInterestCalculation(@Valid CompoundInterestRequestDto compoundInterestRequestDto) throws JsonProcessingException {
+        return compoundInterestRequestDto.isIncludeDetails() ?  compoundInterestCalculationWithDetails(compoundInterestRequestDto) : compoundInterestCalculationNoDetails(compoundInterestRequestDto);
+    }
 }
 

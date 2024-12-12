@@ -1,0 +1,7 @@
+{
+  "originalPrincipalSum": 100,
+  "nominalAnnualInterestRate" : 0.04,
+  "compoundingFrequency": 12,
+  "time": 1,
+  "includeDetails": true
+}

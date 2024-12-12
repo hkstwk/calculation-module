@@ -2,6 +2,7 @@ package nl.hkstwk.calculationmodule;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,7 +10,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.util.ResourceUtils;
 import org.testcontainers.containers.MySQLContainer;
+
+import java.io.FileNotFoundException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @ActiveProfiles("it")
 @SpringBootTest
@@ -21,8 +27,14 @@ public class AbstractIT {
 
     protected static MySQLContainer<?> mysqlContainer;
 
-    @Value("${test.json.directory}")
-    protected String jsonDirectory;
+    @Value("${test.json.directory.request}")
+    protected String jsonRequestDirectory;
+
+    @Value("${test.json.directory.response}")
+    protected String jsonResponseDirectory;
+
+    protected Path requestDirectory;
+    protected Path responseDirectory;
 
     @BeforeAll
     static void setUp() {
@@ -44,6 +56,12 @@ public class AbstractIT {
         System.out.println("MySQL container started at: " + mysqlContainer.getJdbcUrl());
         System.out.println("Username: " + mysqlContainer.getUsername());
         System.out.println("Password: " + mysqlContainer.getPassword());
+    }
+
+    @BeforeEach
+    void setUpPaths() throws FileNotFoundException {
+        requestDirectory = Paths.get(ResourceUtils.getFile(jsonRequestDirectory).toURI());
+        responseDirectory = Paths.get(ResourceUtils.getFile(jsonResponseDirectory).toURI());
     }
 
     @AfterAll
