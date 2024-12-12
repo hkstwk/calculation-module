@@ -1,7 +1,9 @@
 package nl.hkstwk.calculationmodule.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import jakarta.validation.*;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
 import nl.hkstwk.calculationmodule.dto.CompoundInterestDetailsDto;
 import nl.hkstwk.calculationmodule.dto.CompoundInterestRequestDto;
 import nl.hkstwk.calculationmodule.dto.CompoundInterestResponseDto;
@@ -10,6 +12,7 @@ import nl.hkstwk.calculationmodule.enums.CalculationTypeEnum;
 import nl.hkstwk.calculationmodule.mappers.CompoundInterestMapper;
 import nl.hkstwk.calculationmodule.services.CalculationRequestService;
 import nl.hkstwk.calculationmodule.services.InterestService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -40,6 +43,13 @@ class InterestControllerTest {
 
     @Mock
     private CompoundInterestMapper compoundInterestMapper;
+
+    private Validator validator;
+
+    @BeforeEach
+    void setUp() {
+        validator = Validation.buildDefaultValidatorFactory().getValidator();
+    }
 
     @Test
     void compoundInterestCalculation() throws JsonProcessingException {
@@ -114,31 +124,26 @@ class InterestControllerTest {
     }
 
     @Test
-    void givenInvalidRequest_thenThrowException() {
-        CompoundInterestRequestDto invalidRequest = CompoundInterestRequestDto.builder()
-                .originalPrincipalSum(null)
-                .nominalAnnualInterestRate(null)
-                .compoundingFrequency(0)
-                .time(0)
+    void testInvalidCompoundInterestRequestDto() {
+        // Create an invalid DTO
+        CompoundInterestRequestDto invalidDto = CompoundInterestRequestDto.builder()
+                .originalPrincipalSum(BigDecimal.valueOf(-100)) // Invalid: not positive
+                .nominalAnnualInterestRate(null)                // Invalid: null
+                .compoundingFrequency(0)                        // Invalid: less than 1
+                .time(-1)                                       // Invalid: less than 1
                 .includeDetails(false)
                 .build();
 
-        Validator validator;
-        try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
-            validator = factory.getValidator();
-        }
+        // Validate DTO manually
+        Set<ConstraintViolation<CompoundInterestRequestDto>> violations = validator.validate(invalidDto);
 
-        Set<ConstraintViolation<CompoundInterestRequestDto>> violations = validator.validate(invalidRequest);
+        assertFalse(violations.isEmpty(), "Expected validation violations but found none.");
 
-        assertEquals(4, violations.size()); // Expect 4 violations due to invalid fields
-
-        ConstraintViolationException exception = assertThrows(ConstraintViolationException.class, () -> {
-            if (!violations.isEmpty()) {
-                throw new ConstraintViolationException(violations);
-            }
-        });
-
-        assertEquals(4, exception.getConstraintViolations().size());
+        // Check specific violation messages
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("originalPrincipalSum") && v.getMessage().contains("moet groter dan 0 zijn")));
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("nominalAnnualInterestRate") && v.getMessage().contains("mag niet null zijn")));
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("compoundingFrequency") && v.getMessage().contains("moet groter of gelijk aan 1 zijn")));
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("time") && v.getMessage().contains("moet groter of gelijk aan 1 zijn")));
     }
 
     private static CompoundInterestRequestDto getCompoundInterestRequestDto(int compoundingFrequency, boolean includeDetails) {
