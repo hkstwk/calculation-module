@@ -21,9 +21,9 @@ jobs:
         with:
           java-version: '21'
 
-      # Build step
-      - name: Build with Maven
-        run: mvn -B clean compile
+#      # Build step
+#      - name: Build with Maven
+#        run: mvn -B clean compile
 
       # Unit tests step
       - name: Run unit tests
