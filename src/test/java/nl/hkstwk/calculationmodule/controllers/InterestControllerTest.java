@@ -139,6 +139,8 @@ class InterestControllerTest {
 
         assertFalse(violations.isEmpty(), "Expected validation violations but found none.");
 
+        violations.forEach(v -> System.out.println(v.getPropertyPath() + ": " + v.getMessage()));
+
         // Check specific violation messages
         assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("originalPrincipalSum") && v.getMessage().contains("moet groter dan 0 zijn")));
         assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("nominalAnnualInterestRate") && v.getMessage().contains("mag niet null zijn")));
