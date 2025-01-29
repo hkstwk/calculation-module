@@ -36,44 +36,8 @@ jobs:
         run: mvn -B failsafe:integration-test failsafe:verify -f pom.xml
         if: success()
 
-      - name: Extract Version Type from Commit Message
-        id: extract_version_type
-        run: |
-          COMMIT_MSG=$(git log -1 --pretty=%B)
-          if [[ $COMMIT_MSG =~ \[version_type:(major|minor|patch)\] ]]; then
-            VERSION_TYPE=${BASH_REMATCH[1]}
-          else
-            VERSION_TYPE="patch"
-          fi
-          echo "VERSION_TYPE=$VERSION_TYPE" >> $GITHUB_ENV
-
-      - name: Generate Git Tag
-        id: generate_tag
-        run: |
-          VERSION_PREFIX="v"
-          LATEST_TAG=$(git describe --tags `git rev-list --tags --max-count=1`)
-          VERSION_MAJOR=$(echo $LATEST_TAG | cut -d'.' -f1 | tr -d 'v')
-          VERSION_MINOR=$(echo $LATEST_TAG | cut -d'.' -f2)
-          VERSION_PATCH=$(echo $LATEST_TAG | cut -d'.' -f3 | cut -d'-' -f1)
-          
-          if [ "$VERSION_TYPE" = "major" ]; then
-            VERSION_MAJOR=$((VERSION_MAJOR + 1))
-            VERSION_MINOR=0
-            VERSION_PATCH=0
-          elif [ "$VERSION_TYPE" = "minor" ]; then
-            VERSION_MINOR=$((VERSION_MINOR + 1))
-            VERSION_PATCH=0
-          else
-            VERSION_PATCH=$((VERSION_PATCH + 1))
-          fi
-          
-          NEW_TAG="${VERSION_PREFIX}${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH}-$(date +'%Y%m%d-%H%M%S')"
-          echo "Generated new tag: $NEW_TAG"
-          echo "NEW_TAG=$NEW_TAG" >> $GITHUB_ENV
-
-      - name: Push Git Tag
-        run: |
-          git config user.name "GitHub Actions"
-          git config user.email github-actions@users.noreply.github.com
-          git tag ${{ env.NEW_TAG }}
-          git push origin ${{ env.NEW_TAG }}
+      - name: Semantic Release
+        uses: cycjimmy/semantic-release-action@v4
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
