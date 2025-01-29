@@ -139,13 +139,11 @@ class InterestControllerTest {
 
         assertFalse(violations.isEmpty(), "Expected validation violations but found none.");
 
-        violations.forEach(v -> System.out.println(v.getPropertyPath() + ": " + v.getMessage()));
-
-        // Check specific violation messages
-        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("originalPrincipalSum") && v.getMessage().contains("moet groter dan 0 zijn")));
-        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("nominalAnnualInterestRate") && v.getMessage().contains("mag niet null zijn")));
-        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("compoundingFrequency") && v.getMessage().contains("moet groter of gelijk aan 1 zijn")));
-        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("time") && v.getMessage().contains("moet groter of gelijk aan 1 zijn")));
+        // Check specific violation message
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("originalPrincipalSum") && v.getMessage().contains("must be greater than 0")));
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("nominalAnnualInterestRate") && v.getMessage().contains("must not be null")));
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("compoundingFrequency") && v.getMessage().contains("must be greater than or equal to 1")));
+        assertTrue(violations.stream().anyMatch(v -> v.getPropertyPath().toString().equals("time") && v.getMessage().contains("must be greater than or equal to 1")));
     }
 
     private static CompoundInterestRequestDto getCompoundInterestRequestDto(int compoundingFrequency, boolean includeDetails) {
