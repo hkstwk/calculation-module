@@ -25,10 +25,10 @@ jobs:
       - name: Build with Maven
         run: mvn -B clean compile
 
-#      # Unit tests step
-#      - name: Run unit tests
-#        run: mvn -B test
-#        if: success()
+      # Unit tests step
+      - name: Run unit tests
+        run: mvn test
+        if: success()
 
       # Integration tests step
       - name: Run integration tests
