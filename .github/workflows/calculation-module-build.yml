@@ -28,7 +28,7 @@ jobs:
 
       # Build step
       - name: Build with Maven
-        run: mvn -B clean compile
+        run: mvn -B --update-snapshots clean compile
 
       # Unit tests step
       - name: Run unit tests
