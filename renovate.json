@@ -6,10 +6,16 @@
   "dependencyDashboard": true,
   "packageRules": [
     {
-      "matchManagers": ["maven"],
+      "matchManagers": [
+        "maven"
+      ],
       "groupName": "All Maven Dependencies",
-      "matchPackagePatterns": ["*"]
+      "matchPackageNames": [
+        "*"
+      ]
     }
   ],
-  "schedule": ["monthly"]
+  "schedule": [
+    "monthly"
+  ]
 }
