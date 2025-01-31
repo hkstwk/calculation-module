@@ -24,6 +24,7 @@ jobs:
         with:
           java-version: '21'
           distribution: "corretto"
+          cache: maven
 
       # Build step
       - name: Build with Maven
