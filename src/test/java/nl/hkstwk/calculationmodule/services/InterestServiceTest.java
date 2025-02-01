@@ -35,22 +35,23 @@ class InterestServiceTest {
 
     public static Stream<Arguments> compoundInterestCalculatorInput(){
         return Stream.of(
-                arguments(1, 1, 0.03, 10_000.00, 10_300.00),
-                arguments(1, 12, 0.03, 10_000.00, 10_304.16),
-                arguments(2, 1, 0.03, 10_000.00, 10_609.00),
-                arguments(2, 12, 0.03, 10_000.00, 10_617.57),
-                arguments(1, 1, 0.04, 10_000, 10_400),
-                arguments(1, 12, 0.04, 10_000, 10_407.42),
-                arguments(2, 12, 0.07, 10_000, 11_498.06)
+                arguments(1, 1, 0.03, 10_000.00, 0, 10_300.00),
+                arguments(1, 12, 0.03, 10_000.00, 0, 10_304.16),
+                arguments(2, 1, 0.03, 10_000.00, 0, 10_609.00),
+                arguments(2, 12, 0.03, 10_000.00, 0, 10_617.57),
+                arguments(1, 1, 0.04, 10_000, 0, 10_400),
+                arguments(1, 12, 0.04, 10_000, 0, 10_407.42),
+                arguments(2, 12, 0.07, 10_000, 0, 11_498.06)
         );
     }
 
     @ParameterizedTest
     @MethodSource("compoundInterestCalculatorInput")
-    public void testCompoundInterestCalculator(int time, int frequency, double nominalInterest, double originalPrincipalSum, double accumulatedValue) throws JsonProcessingException {
+    public void testCompoundInterestCalculator(int time, int frequency, double nominalInterest, double originalPrincipalSum, double monthlyDeposit, double accumulatedValue) throws JsonProcessingException {
         CompoundInterestRequestDto request = CompoundInterestRequestDto.builder()
                 .time(time)
                 .originalPrincipalSum(BigDecimal.valueOf(originalPrincipalSum))
+                .monthlyDeposit(BigDecimal.valueOf(monthlyDeposit))
                 .compoundingFrequency(frequency)
                 .nominalAnnualInterestRate(BigDecimal.valueOf(nominalInterest))
                 .includeDetails(false)
@@ -63,10 +64,11 @@ class InterestServiceTest {
 
     @ParameterizedTest
     @MethodSource("compoundInterestCalculatorInput")
-    void testCompoundInterestWithDetailsCalculator(int time, int frequency, double nominalInterest, double originalPrincipalSum, double accumulatedValue) throws JsonProcessingException {
+    void testCompoundInterestWithDetailsCalculator(int time, int frequency, double nominalInterest, double originalPrincipalSum, double monthlyDeposit, double accumulatedValue) throws JsonProcessingException {
         CompoundInterestRequestDto request = CompoundInterestRequestDto.builder()
                 .time(time)
                 .originalPrincipalSum(BigDecimal.valueOf(originalPrincipalSum))
+                .monthlyDeposit(BigDecimal.valueOf(monthlyDeposit))
                 .compoundingFrequency(frequency)
                 .nominalAnnualInterestRate(BigDecimal.valueOf(nominalInterest))
                 .includeDetails(true)

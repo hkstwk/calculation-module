@@ -3,73 +3,73 @@
   "details": [
     {
       "periodNumber": 1,
-      "startingAmount": 100.00,
+      "initialDeposit": 100.00,
       "interestForPeriod": 0.33,
       "accumulatedValue": 100.33
     },
     {
       "periodNumber": 2,
-      "startingAmount": 100.33,
+      "initialDeposit": 100.33,
       "interestForPeriod": 0.33,
       "accumulatedValue": 100.67
     },
     {
       "periodNumber": 3,
-      "startingAmount": 100.67,
+      "initialDeposit": 100.67,
       "interestForPeriod": 0.34,
       "accumulatedValue": 101.00
     },
     {
       "periodNumber": 4,
-      "startingAmount": 101.00,
+      "initialDeposit": 101.00,
       "interestForPeriod": 0.34,
       "accumulatedValue": 101.34
     },
     {
       "periodNumber": 5,
-      "startingAmount": 101.34,
+      "initialDeposit": 101.34,
       "interestForPeriod": 0.34,
       "accumulatedValue": 101.68
     },
     {
       "periodNumber": 6,
-      "startingAmount": 101.68,
+      "initialDeposit": 101.68,
       "interestForPeriod": 0.34,
       "accumulatedValue": 102.02
     },
     {
       "periodNumber": 7,
-      "startingAmount": 102.02,
+      "initialDeposit": 102.02,
       "interestForPeriod": 0.34,
       "accumulatedValue": 102.36
     },
     {
       "periodNumber": 8,
-      "startingAmount": 102.36,
+      "initialDeposit": 102.36,
       "interestForPeriod": 0.34,
       "accumulatedValue": 102.70
     },
     {
       "periodNumber": 9,
-      "startingAmount": 102.70,
+      "initialDeposit": 102.70,
       "interestForPeriod": 0.34,
       "accumulatedValue": 103.04
     },
     {
       "periodNumber": 10,
-      "startingAmount": 103.04,
+      "initialDeposit": 103.04,
       "interestForPeriod": 0.34,
       "accumulatedValue": 103.38
     },
     {
       "periodNumber": 11,
-      "startingAmount": 103.38,
+      "initialDeposit": 103.38,
       "interestForPeriod": 0.34,
       "accumulatedValue": 103.73
     },
     {
       "periodNumber": 12,
-      "startingAmount": 103.73,
+      "initialDeposit": 103.73,
       "interestForPeriod": 0.35,
       "accumulatedValue": 104.07
     }

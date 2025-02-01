@@ -51,14 +51,17 @@ public class InterestService {
     }
 
     public CompoundInterestResponseDto compoundInterestCalculationWithDetails(CompoundInterestRequestDto compoundInterestRequestDto) throws JsonProcessingException {
-        log.info("Start calculation of compound interest with detailed results for request: {}", compoundInterestRequestDto);
+        log.info("Start calculation of compound interest for request: {}", compoundInterestRequestDto);
 
         BigDecimal principalSum = compoundInterestRequestDto.getOriginalPrincipalSum();
         BigDecimal nominalAnnualInterestRate = compoundInterestRequestDto.getNominalAnnualInterestRate();
         int compoundingFrequency = compoundInterestRequestDto.getCompoundingFrequency();
         int time = compoundInterestRequestDto.getTime();
+        BigDecimal monthlyDeposit = compoundInterestRequestDto.getMonthlyDeposit();
+        if (monthlyDeposit == null) {
+            monthlyDeposit = BigDecimal.ZERO;
+        }
 
-        // Calculate the periodic nominalAnnualInterestRate
         BigDecimal periodicRate = nominalAnnualInterestRate.divide(BigDecimal.valueOf(compoundingFrequency), 10, RoundingMode.HALF_UP);
         log.info("Periodic interest rate: {}", periodicRate);
 
@@ -66,25 +69,29 @@ public class InterestService {
         BigDecimal accumulatedValue = principalSum;
         List<CompoundInterestDetailsDto> periodDetails = new ArrayList<>();
 
-        // Iterate through each compounding period to collect details
         for (int period = 1; period <= totalPeriods; period++) {
+            if (monthlyDeposit.compareTo(BigDecimal.ZERO) > 0 && (period - 1) % (compoundingFrequency / 12) == 0) {
+                accumulatedValue = accumulatedValue.add(monthlyDeposit).setScale(10, RoundingMode.HALF_UP);
+            }
+
             BigDecimal interestForPeriod = accumulatedValue.multiply(periodicRate).setScale(10, RoundingMode.HALF_UP);
             accumulatedValue = accumulatedValue.add(interestForPeriod).setScale(10, RoundingMode.HALF_UP);
 
-            // Capture details for the current period
-            CompoundInterestDetailsDto periodDetail = CompoundInterestDetailsDto.builder()
+            CompoundInterestDetailsDto.CompoundInterestDetailsDtoBuilder builder = CompoundInterestDetailsDto.builder()
                     .periodNumber(period)
-                    .startingAmount(accumulatedValue.subtract(interestForPeriod).setScale(2, RoundingMode.HALF_UP))
+                    .initialDeposit(accumulatedValue.subtract(interestForPeriod).setScale(2, RoundingMode.HALF_UP))
                     .interestForPeriod(interestForPeriod.setScale(2, RoundingMode.HALF_UP))
-                    .accumulatedValue(accumulatedValue.setScale(2, RoundingMode.HALF_UP))
-                    .build();
-            periodDetails.add(periodDetail);
+                    .accumulatedValue(accumulatedValue.setScale(2, RoundingMode.HALF_UP));
+
+            // Include monthly deposit in details only if applicable
+            if (monthlyDeposit.compareTo(BigDecimal.ZERO) > 0) {
+                builder.monthlyDeposit(monthlyDeposit.setScale(2, RoundingMode.HALF_UP));
+            }
+
+            periodDetails.add(builder.build());
         }
 
-        // Final accumulated value rounded to 2 decimal places
         BigDecimal finalAmount = accumulatedValue.setScale(2, RoundingMode.HALF_UP);
-
-        // Build response with full details
         CompoundInterestResponseDto response = CompoundInterestResponseDto.builder()
                 .finalAmount(finalAmount)
                 .details(periodDetails)
@@ -94,7 +101,6 @@ public class InterestService {
         log.info("Detailed calculation: {}", objectMapper.writeValueAsString(response));
         return response;
     }
-
     public CompoundInterestResponseDto compoundInterestCalculation(@Valid CompoundInterestRequestDto compoundInterestRequestDto) throws JsonProcessingException {
         return compoundInterestRequestDto.isIncludeDetails() ?  compoundInterestCalculationWithDetails(compoundInterestRequestDto) : compoundInterestCalculationNoDetails(compoundInterestRequestDto);
     }
