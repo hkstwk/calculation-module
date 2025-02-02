@@ -70,7 +70,7 @@ public class InterestService {
         List<CompoundInterestDetailsDto> periodDetails = new ArrayList<>();
 
         for (int period = 1; period <= totalPeriods; period++) {
-            if (monthlyDeposit.compareTo(BigDecimal.ZERO) > 0 && (period - 1) % (compoundingFrequency / 12) == 0) {
+            if (monthlyDeposit.compareTo(BigDecimal.ZERO) > 0 && ((period - 1) % (compoundingFrequency / 12)) == 0) {
                 accumulatedValue = accumulatedValue.add(monthlyDeposit).setScale(10, RoundingMode.HALF_UP);
             }
 
@@ -98,7 +98,7 @@ public class InterestService {
                 .build();
 
         log.info("Final accumulated value after {} periods: {}", totalPeriods, finalAmount);
-        log.info("Detailed calculation: {}", objectMapper.writeValueAsString(response));
+        log.info("Detailed calculation: {}", objectMapper.writeValueAsString(response.getDetails()));
         return response;
     }
     public CompoundInterestResponseDto compoundInterestCalculation(@Valid CompoundInterestRequestDto compoundInterestRequestDto) throws JsonProcessingException {

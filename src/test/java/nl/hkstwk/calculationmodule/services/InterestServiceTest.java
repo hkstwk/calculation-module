@@ -9,8 +9,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
@@ -22,20 +20,18 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 @ExtendWith(MockitoExtension.class)
 class InterestServiceTest {
-    @InjectMocks
     private InterestService interestService;
-
-    @Mock
-    private ObjectMapper objectMapper;
 
     @BeforeEach
     void setUp() {
-        objectMapper = new ObjectMapper();
+        interestService = new InterestService(new ObjectMapper());
     }
 
     public static Stream<Arguments> compoundInterestCalculatorInput(){
         return Stream.of(
                 arguments(1, 1, 0.03, 10_000.00, 0, 10_300.00),
+                arguments(1, 12, 0.03, 10_000.00, 100, 11_523.84),
+                arguments(40, 12, 0.03, 200_000.00, 1_000, 1_591_404.40),
                 arguments(1, 12, 0.03, 10_000.00, 0, 10_304.16),
                 arguments(2, 1, 0.03, 10_000.00, 0, 10_609.00),
                 arguments(2, 12, 0.03, 10_000.00, 0, 10_617.57),
@@ -54,7 +50,7 @@ class InterestServiceTest {
                 .monthlyDeposit(BigDecimal.valueOf(monthlyDeposit))
                 .compoundingFrequency(frequency)
                 .nominalAnnualInterestRate(BigDecimal.valueOf(nominalInterest))
-                .includeDetails(false)
+                .includeDetails(true)
                 .build();
 
         CompoundInterestResponseDto responseDto = interestService.compoundInterestCalculation(request);
