@@ -30,6 +30,7 @@ class InterestServiceTest {
     public static Stream<Arguments> compoundInterestCalculatorInput(){
         return Stream.of(
                 arguments(1, 1, 0.03, 10_000.00, 0, 10_300.00),
+                arguments(1, 12, 0.00, 10_000.00, 100, 11_200.00),
                 arguments(1, 12, 0.03, 10_000.00, 100, 11_523.84),
                 arguments(40, 12, 0.03, 200_000.00, 1_000, 1_591_404.40),
                 arguments(1, 12, 0.03, 10_000.00, 0, 10_304.16),
