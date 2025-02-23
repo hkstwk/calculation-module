@@ -11,9 +11,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          submodules: true
 
-      - name: Set release version
-        run: echo "VERSION=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
+      - name: Debug workspace contents
+        run: ls -la
 
       - name: Build project
         run: mvn clean package -DskipTests
