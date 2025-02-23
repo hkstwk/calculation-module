@@ -12,22 +12,27 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Package with Maven
-        run: mvn -B -clean packag
+      - name: Set release version
+        run: echo "VERSION=$(git describe --tags --abbrev=0)" >> $GITHUB_ENV
 
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Extract version from release tag
-        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+      - name: Build project
+        run: mvn clean package -DskipTests
 
       - name: Build Docker image
-        run: docker build -t hkstwk/calculation-module:${{ env.VERSION }} -t hkstwk/calculation-module:latest .
+        run: docker build --build-arg JAR_FILE=target/calculation-module-${{ env.VERSION }}.jar -t mydockerhubuser/myapp:${{ env.VERSION }} .
+          - name: Log in to Docker Hub
+            uses: docker/login-action@v2
+            with:
+              username: ${{ secrets.DOCKERHUB_USERNAME }}
+              password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Push Docker image
-        run: |
-          docker push hkstwk/calculation-module:${{ env.VERSION }}
-          docker push hkstwk/calculation-module:latest
+          - name: Extract version from release tag
+            run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+
+          - name: Build Docker image
+            run: docker build -t hkstwk/calculation-module:${{ env.VERSION }} -t hkstwk/calculation-module:latest .
+
+          - name: Push Docker image
+            run: |
+              docker push hkstwk/calculation-module:${{ env.VERSION }}
+              docker push hkstwk/calculation-module:latest

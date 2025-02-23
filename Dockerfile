@@ -1,14 +1,15 @@
 # Use an OpenJDK 21 base image
 FROM amazoncorretto:21 AS build
 
-# Set working directory
+# Set the working directory
 WORKDIR /app
 
-# Copy the Spring Boot JAR file into the container
-COPY target/calculation-module.jar calculation-module.jar
+# Copy the JAR file (pass the filename dynamically)
+ARG JAR_FILE=target/calculation-module-0.0.1-SNAPSHOT.jar
+COPY ${JAR_FILE} app.jar
 
-# Expose application port
+# Expose application port (if applicable)
 EXPOSE 8080
 
-# Run the Spring Boot application
-ENTRYPOINT ["java", "-jar", "calculation-module.jar"]
+# Run the JAR file
+ENTRYPOINT ["java", "-jar", "app.jar"]
