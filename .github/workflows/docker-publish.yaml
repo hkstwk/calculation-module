@@ -18,9 +18,6 @@ jobs:
       - name: Build project
         run: mvn clean package -DskipTests
 
-      - name: Build Docker image
-        run: docker build --build-arg JAR_FILE=target/calculation-module-${{ env.VERSION }}.jar -t mydockerhubuser/myapp:${{ env.VERSION }} .
-
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
