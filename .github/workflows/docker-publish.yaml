@@ -22,9 +22,9 @@ jobs:
         run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
 
       - name: Build Docker image
-        run: docker build -t mydockerhubuser/myapp:${{ env.VERSION }} -t mydockerhubuser/myapp:latest .
+        run: docker build -t hkstwk/calculation-module:${{ env.VERSION }} -t hkstwk/calculation-module:latest .
 
       - name: Push Docker image
         run: |
-          docker push mydockerhubuser/myapp:${{ env.VERSION }}
-          docker push mydockerhubuser/myapp:latest
+          docker push hkstwk/calculation-module:${{ env.VERSION }}
+          docker push hkstwk/calculation-module:latest
