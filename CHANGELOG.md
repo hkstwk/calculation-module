@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/hkstwk/calculation-module/compare/v1.1.4...v1.2.0) (2025-03-01)
+
+
+### Features
+
+* refactor to use dedicated calculation utility class. ([eb6b9c0](https://github.com/hkstwk/calculation-module/commit/eb6b9c051a62746f2b416c696c4187a013446765))
+
 ## [1.1.4](https://github.com/hkstwk/calculation-module/compare/v1.1.3...v1.1.4) (2025-03-01)
 
 
