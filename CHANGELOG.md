@@ -1,3 +1,10 @@
+## [1.1.4](https://github.com/hkstwk/calculation-module/compare/v1.1.3...v1.1.4) (2025-03-01)
+
+
+### Bug Fixes
+
+* **deps:** update all maven dependencies ([dc866cc](https://github.com/hkstwk/calculation-module/commit/dc866ccfae9fb8b24b676173dbf6dffb32303091))
+
 ## [1.1.1](https://github.com/hkstwk/calculation-module/compare/v1.1.0...v1.1.1) (2025-02-02)
 
 
