@@ -1,5 +1,5 @@
 # Use an OpenJDK 21 base image
-FROM amazoncorretto:21 AS build
+FROM amazoncorretto:21.0.6 AS build
 
 # Set the working directory
 WORKDIR /app
