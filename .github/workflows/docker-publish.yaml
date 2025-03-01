@@ -19,8 +19,18 @@ jobs:
         with:
           submodules: true
 
-      - name: Extract version from release tag
-        run: echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+      - name: Extract version from release tag or manual input
+        run: |
+          if [ -z "${{ github.event.inputs.version }}" ]; then
+            if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+              echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+            else
+              echo "Error: GITHUB_REF is not a tag." >&2
+              exit 1
+            fi
+          else
+            echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_ENV
+          fi
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4
