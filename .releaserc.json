@@ -11,6 +11,14 @@
         "message": "chore(release): ${nextRelease.version}"
       }
     ],
-    "@semantic-release/github"
+    [
+      "@semantic-release/github",
+      {
+        "release": {
+          "draft": false,
+          "prerelease": false
+        }
+      }
+    ]
   ]
 }
