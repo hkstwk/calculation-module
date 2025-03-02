@@ -21,14 +21,9 @@ public class InterestService {
 
         CompoundInterestResponseDto result = CompoundInterestCalculator.calculate(request);
 
-//        CompoundInterestResponseDto response = CompoundInterestResponseDto.builder()
-//                .finalAmount(result.getFinalAmount())
-//                .details(request.isIncludeDetails() ? result.getDetails() : null)
-//                .build();
-
         log.info("Final accumulated value: {}", result.getFinalAmount());
         if (request.isIncludeDetails()) {
-            log.info("Detailed calculation: {}", objectMapper.writeValueAsString(result.getDetails()));
+            log.info("Details of calculation: {}", objectMapper.writeValueAsString(result.getDetails()));
         }
 
         return result;
