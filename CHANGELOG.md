@@ -1,3 +1,10 @@
+## [1.2.1](https://github.com/hkstwk/calculation-module/compare/v1.2.0...v1.2.1) (2025-03-02)
+
+
+### Bug Fixes
+
+* added some debug logging to CompoundInterestCalculator.java ([43a8b97](https://github.com/hkstwk/calculation-module/commit/43a8b9774463b9e5502594440632d1cf0c50f4e6))
+
 # [1.2.0](https://github.com/hkstwk/calculation-module/compare/v1.1.4...v1.2.0) (2025-03-01)
 
 
