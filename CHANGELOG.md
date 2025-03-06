@@ -1,3 +1,10 @@
+## [1.2.3](https://github.com/hkstwk/calculation-module/compare/v1.2.2...v1.2.3) (2025-03-06)
+
+
+### Bug Fixes
+
+* dummy change to test docker workflow ([93fb789](https://github.com/hkstwk/calculation-module/commit/93fb7890582bf5b7219b2038dafee7e2ac3d904a))
+
 ## [1.2.2](https://github.com/hkstwk/calculation-module/compare/v1.2.1...v1.2.2) (2025-03-06)
 
 
