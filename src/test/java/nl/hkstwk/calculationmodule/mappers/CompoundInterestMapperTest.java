@@ -60,7 +60,6 @@ class CompoundInterestMapperTest {
         verify(objectMapper, times(1)).writeValueAsString(requestDto);
     }
 
-    // New test for toDto method
     @Test
     void toDto_ShouldMapToDto_WhenValidInput() {
         String mockRequestData = "{\"principal\":1000,\"rate\":5,\"time\":2}";
