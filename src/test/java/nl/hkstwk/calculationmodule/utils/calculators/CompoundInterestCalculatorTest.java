@@ -1,108 +1,51 @@
 package nl.hkstwk.calculationmodule.utils.calculators;
 
-import nl.hkstwk.calculationmodule.dto.CompoundInterestDetailsDto;
 import nl.hkstwk.calculationmodule.dto.CompoundInterestRequestDto;
 import nl.hkstwk.calculationmodule.dto.CompoundInterestResponseDto;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.stream.Stream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 class CompoundInterestCalculatorTest {
 
-    @Test
-    void testCalculateBasicScenario() {
-        CompoundInterestRequestDto request = CompoundInterestRequestDto.builder()
-                .originalPrincipalSum(BigDecimal.valueOf(1000))
-                .nominalAnnualInterestRate(BigDecimal.valueOf(0.05)) // 5% annual interest rate
-                .compoundingFrequency(12) // Monthly compounding
-                .time(1) // 1 year
-                .includeDetails(false)
-                .build();
-
-        CompoundInterestResponseDto response = CompoundInterestCalculator.calculate(request);
-
-        assertNotNull(response);
-        assertEquals(BigDecimal.valueOf(1051.16), response.getFinalAmount()); // Expected value
-        assertTrue(response.getDetails().isEmpty()); // No details should be added
+    public static Stream<Arguments> compoundInterestCalculatorInput(){
+        return Stream.of(
+                arguments(1, 1, 0.03, 10_000.00, 0, 10_300.00),
+                arguments(1, 12, 0.00, 10_000.00, 100, 11_200.00),
+                arguments(1, 12, 0.03, 10_000.00, 100, 11_523.84),
+                arguments(40, 12, 0.03, 200_000.00, 1_000, 1_591_404.40),
+                arguments(1, 12, 0.03, 10_000.00, 0, 10_304.16),
+                arguments(2, 1, 0.03, 10_000.00, 0, 10_609.00),
+                arguments(2, 12, 0.03, 10_000.00, 0, 10_617.57),
+                arguments(1, 1, 0.04, 10_000, 0, 10_400),
+                arguments(1, 12, 0.04, 10_000, 0, 10_407.42),
+                arguments(2, 12, 0.07, 10_000, 0, 11_498.06)
+        );
     }
 
-    @Test
-    void testCalculateWithMonthlyDeposits() {
+    @ParameterizedTest
+    @MethodSource("compoundInterestCalculatorInput")
+    public void testCompoundInterestCalculator(int time, int frequency, double nominalInterest, double originalPrincipalSum, double monthlyDeposit, double accumulatedValue) {
         CompoundInterestRequestDto request = CompoundInterestRequestDto.builder()
-                .originalPrincipalSum(BigDecimal.valueOf(1000))
-                .monthlyDeposit(BigDecimal.valueOf(100))
-                .nominalAnnualInterestRate(BigDecimal.valueOf(0.05)) // 5% annual interest rate
-                .compoundingFrequency(12) // Monthly compounding
-                .time(1) // 1 year
-                .includeDetails(false)
-                .build();
-
-        CompoundInterestResponseDto response = CompoundInterestCalculator.calculate(request);
-
-        assertNotNull(response);
-        assertEquals(BigDecimal.valueOf(2285.55), response.getFinalAmount()); // Expected value
-        assertTrue(response.getDetails().isEmpty()); // No details should be added
-    }
-
-    @Test
-    void testCalculateWithDetailsEnabled() {
-        CompoundInterestRequestDto request = CompoundInterestRequestDto.builder()
-                .originalPrincipalSum(BigDecimal.valueOf(1000))
-                .monthlyDeposit(BigDecimal.valueOf(100))
-                .nominalAnnualInterestRate(BigDecimal.valueOf(0.05)) // 5% annual interest rate
-                .compoundingFrequency(12) // Monthly compounding
-                .time(1) // 1 year
+                .time(time)
+                .originalPrincipalSum(BigDecimal.valueOf(originalPrincipalSum))
+                .monthlyDeposit(BigDecimal.valueOf(monthlyDeposit))
+                .compoundingFrequency(frequency)
+                .nominalAnnualInterestRate(BigDecimal.valueOf(nominalInterest))
                 .includeDetails(true)
                 .build();
 
-        CompoundInterestResponseDto response = CompoundInterestCalculator.calculate(request);
+        CompoundInterestResponseDto responseDto = CompoundInterestCalculator.calculate(request);
 
-        assertNotNull(response);
-        assertEquals(BigDecimal.valueOf(2285.55), response.getFinalAmount()); // Expected value
-        assertFalse(response.getDetails().isEmpty());
-        assertEquals(12, response.getDetails().size()); // 12 periods for monthly compounding
-
-        // Verify the details of the first period
-        CompoundInterestDetailsDto firstPeriod = response.getDetails().get(0);
-        assertNotNull(firstPeriod);
-        assertEquals(1, firstPeriod.getPeriodNumber());
-        assertEquals(BigDecimal.valueOf(1050.00), firstPeriod.getAccumulatedValue()); // Example value
+        assertThat(responseDto.getFinalAmount()).isEqualTo(BigDecimal.valueOf(accumulatedValue).setScale(2, RoundingMode.HALF_UP));
+        assertThat(responseDto.getDetails()).hasSize(time*frequency);
     }
 
-    @Test
-    void testCalculateWithZeroPrincipalAndZeroInterest() {
-        CompoundInterestRequestDto request = CompoundInterestRequestDto.builder()
-                .originalPrincipalSum(BigDecimal.ZERO)
-                .monthlyDeposit(BigDecimal.ZERO)
-                .nominalAnnualInterestRate(BigDecimal.ZERO)
-                .compoundingFrequency(1)
-                .time(1)
-                .includeDetails(false)
-                .build();
-
-        CompoundInterestResponseDto response = CompoundInterestCalculator.calculate(request);
-
-        assertNotNull(response);
-        assertEquals(BigDecimal.ZERO, response.getFinalAmount()); // Total should be zero
-        assertTrue(response.getDetails().isEmpty()); // No details should be added
-    }
-
-    @Test
-    void testCalculateWithLargeValues() {
-        CompoundInterestRequestDto request = CompoundInterestRequestDto.builder()
-                .originalPrincipalSum(new BigDecimal("1000000000"))
-                .monthlyDeposit(new BigDecimal("10000"))
-                .nominalAnnualInterestRate(new BigDecimal("0.1")) // 10% annual interest rate
-                .compoundingFrequency(12) // Monthly compounding
-                .time(10) // 10 years
-                .includeDetails(false)
-                .build();
-
-        CompoundInterestResponseDto response = CompoundInterestCalculator.calculate(request);
-
-        assertNotNull(response);
-        assertTrue(response.getFinalAmount().compareTo(new BigDecimal("2000000000")) > 0); // Expected to grow significantly
-    }
 }
