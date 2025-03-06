@@ -1,3 +1,10 @@
+## [1.2.2](https://github.com/hkstwk/calculation-module/compare/v1.2.1...v1.2.2) (2025-03-06)
+
+
+### Bug Fixes
+
+* added unit tests for CompoundInterestCalculator.java. Added config for logback to enable debug logging in pure unit tests. ([7ed4c52](https://github.com/hkstwk/calculation-module/commit/7ed4c52e6e1efd14a775e72b39098dbd3c5f7ab4))
+
 ## [1.2.1](https://github.com/hkstwk/calculation-module/compare/v1.2.0...v1.2.1) (2025-03-02)
 
 
