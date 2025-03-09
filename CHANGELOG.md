@@ -1,3 +1,10 @@
+## [1.2.4](https://github.com/hkstwk/calculation-module/compare/v1.2.3...v1.2.4) (2025-03-09)
+
+
+### Bug Fixes
+
+* use secret iso GITHUB_TOKEN ([f5c4a41](https://github.com/hkstwk/calculation-module/commit/f5c4a419ffc17d9ea476b7b55f3dc60edcea80f4))
+
 ## [1.2.3](https://github.com/hkstwk/calculation-module/compare/v1.2.2...v1.2.3) (2025-03-06)
 
 
