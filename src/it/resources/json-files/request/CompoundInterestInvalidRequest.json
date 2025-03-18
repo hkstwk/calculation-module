@@ -1,6 +1,7 @@
 {
   "originalPrincipalSum": 0,
   "nominalAnnualInterestRate" : null,
+  "depositAtStart": null,
   "compoundingFrequency": 0,
   "time": 0
 }

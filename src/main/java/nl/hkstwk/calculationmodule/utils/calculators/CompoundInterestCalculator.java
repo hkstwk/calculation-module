@@ -81,21 +81,25 @@ public class CompoundInterestCalculator {
     }
 
     private static BigDecimal getInitialDepositForPeriod(BigDecimal accumulatedValue, BigDecimal interestForPeriod, CompoundInterestRequestDto requestDto) {
+        BigDecimal result = accumulatedValue;
+
         if (requestDto.isDepositAtStart()) {
-            return accumulatedValue.subtract(interestForPeriod).setScale(2, RoundingMode.HALF_UP);
+            result =  accumulatedValue.subtract(interestForPeriod).setScale(2, RoundingMode.HALF_UP);
+        } else {
+            result = accumulatedValue.subtract(interestForPeriod).subtract(requestDto.getMonthlyDeposit()).setScale(2, RoundingMode.HALF_UP);
         }
-        return accumulatedValue.subtract(interestForPeriod).subtract(requestDto.getMonthlyDeposit()).setScale(2, RoundingMode.HALF_UP);
+        return result;
     }
 
     private static BigDecimal getAccumulatedValue(CompoundInterestRequestDto requestDto, int period, BigDecimal accumulatedValue, BigDecimal monthlyDeposit) {
         BigDecimal result = accumulatedValue;
+        String moment = requestDto.isDepositAtStart() ? "start" : "end";
 
         if ((period - 1) % (12 / requestDto.getCompoundingFrequency()) == 0) {
             result = accumulatedValue.add(monthlyDeposit).setScale(10, RoundingMode.HALF_UP);
-            log.debug("New accumulated value after adding {} monthly deposit: {}", monthlyDeposit, result);
+            log.debug("New accumulated value after adding {} monthly deposit at {} of period: {}", monthlyDeposit, moment, result);
         }
 
         return result;
     }
-
 }

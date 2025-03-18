@@ -37,6 +37,7 @@ class CompoundInterestCalculatorTest {
                 .time(time)
                 .originalPrincipalSum(BigDecimal.valueOf(originalPrincipalSum))
                 .monthlyDeposit(BigDecimal.valueOf(monthlyDeposit))
+                .depositAtStart(true)
                 .compoundingFrequency(frequency)
                 .nominalAnnualInterestRate(BigDecimal.valueOf(nominalInterest))
                 .includeDetails(true)
