@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/hkstwk/calculation-module/compare/v1.2.4...v1.3.0) (2025-03-18)
+
+
+### Features
+
+* moved cors config to configuration class, added option to choose monthly deposit at start or end of period. ([2b5616e](https://github.com/hkstwk/calculation-module/commit/2b5616e1a566d6be33998b46624838fd33354eb6))
+
 ## [1.2.4](https://github.com/hkstwk/calculation-module/compare/v1.2.3...v1.2.4) (2025-03-09)
 
 
