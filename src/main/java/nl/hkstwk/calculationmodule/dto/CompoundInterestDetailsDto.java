@@ -11,8 +11,8 @@ import java.math.BigDecimal;
 public class CompoundInterestDetailsDto {
     private int periodNumber;
     private BigDecimal initialDeposit;
+    private BigDecimal interestForPeriod;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private BigDecimal monthlyDeposit;
-    private BigDecimal interestForPeriod;
     private BigDecimal accumulatedValue;
 }

@@ -12,11 +12,13 @@ import nl.hkstwk.calculationmodule.mappers.CompoundInterestMapper;
 import nl.hkstwk.calculationmodule.services.CalculationRequestService;
 import nl.hkstwk.calculationmodule.services.InterestService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@CrossOrigin(origins = "http://localhost:4200")
 @RequiredArgsConstructor
 @RequestMapping("/interest")
 public class InterestController {

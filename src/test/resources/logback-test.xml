@@ -12,7 +12,7 @@
     </logger>
 
     <!-- Root logger -->
-    <root level="INFO">
+    <root level="WARN">
         <appender-ref ref="Console"/>
     </root>
 </configuration>

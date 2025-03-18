@@ -19,6 +19,7 @@ public class CompoundInterestRequestDto {
     @PositiveOrZero
     @JsonInclude(JsonInclude.Include.NON_NULL)
     BigDecimal monthlyDeposit;
+    boolean depositAtStart;
     @NotNull
     BigDecimal nominalAnnualInterestRate;
     @NotNull

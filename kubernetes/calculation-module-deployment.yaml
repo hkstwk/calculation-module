@@ -5,7 +5,7 @@ metadata:
     app: calculation-module
   name: calculation-module
 spec:
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
       app: calculation-module

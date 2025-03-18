@@ -5,7 +5,7 @@ metadata:
     app: calculation-module-mysql
   name: calculation-module-mysql
 spec:
-  replicas: 1
+  replicas: 0
   selector:
     matchLabels:
       app: calculation-module-mysql
