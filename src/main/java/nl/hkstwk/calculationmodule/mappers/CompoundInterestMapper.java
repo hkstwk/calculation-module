@@ -9,19 +9,22 @@ import nl.hkstwk.calculationmodule.enums.CalculationTypeEnum;
 import nl.hkstwk.calculationmodule.exceptions.DtoNotFoundException;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
 import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
 public class CompoundInterestMapper {
-    // Mapping between `type` values and DTO classes
-    private static final Map<CalculationTypeEnum, Class<?>> dtoTypeMap = new HashMap<>();
+    private static final Map<CalculationTypeEnum, Class<?>> DTO_TYPE_BY_CALCULATION = Map.of(
+            CalculationTypeEnum.COMPOUND_INTEREST, CompoundInterestRequestDto.class,
+            CalculationTypeEnum.COMPOUND_INTEREST_WITH_DETAILS, CompoundInterestRequestDto.class
+    );
 
-    static {
-        dtoTypeMap.put(CalculationTypeEnum.COMPOUND_INTEREST, CompoundInterestRequestDto.class);
-        dtoTypeMap.put(CalculationTypeEnum.COMPOUND_INTEREST_WITH_DETAILS, CompoundInterestRequestDto.class);
-        // Add other mappings as needed
+    private static Class<?> resolveDtoClass(CalculationTypeEnum calculationType) {
+        Class<?> dtoClass = DTO_TYPE_BY_CALCULATION.get(calculationType);
+        if (dtoClass == null) {
+            throw new DtoNotFoundException("Unsupported calculation request type '%s'".formatted(calculationType));
+        }
+        return dtoClass;
     }
 
     private final ObjectMapper objectMapper;
@@ -36,20 +39,16 @@ public class CompoundInterestMapper {
         return calculationRequestEntity;
     }
 
-    public Object toDto(CalculationRequestEntity calculationRequestEntity) {
+    public Object toDto(CalculationRequestEntity calculationRequestEntity) throws JsonProcessingException {
         CalculationTypeEnum calculationType = calculationRequestEntity.getCalculationType();
         String requestData = calculationRequestEntity.getRequestData();
 
-        if (calculationRequestEntity.getRequestData() == null) {
+        if (requestData == null) {
             throw new IllegalArgumentException("Calculation request data is null");
         }
 
-        Class<?> dtoClass = dtoTypeMap.get(calculationType);
-
-        if (dtoClass != null) {
-            return objectMapper.convertValue(requestData, dtoClass);
-        }
-
-        throw new DtoNotFoundException("Unsupported calculation request type '%s'".formatted(calculationType));
+        Class<?> dtoClass = resolveDtoClass(calculationType);
+        return objectMapper.readValue(requestData, dtoClass);
     }
+
 }

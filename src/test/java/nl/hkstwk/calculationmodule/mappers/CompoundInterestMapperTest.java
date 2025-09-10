@@ -61,15 +61,15 @@ class CompoundInterestMapperTest {
     }
 
     @Test
-    void toDto_ShouldMapToDto_WhenValidInput() {
+    void toDto_ShouldMapToDto_WhenValidInput() throws JsonProcessingException {
         String mockRequestData = "{\"principal\":1000,\"rate\":5,\"time\":2}";
         calculationRequestEntity.setRequestData(mockRequestData);
-        when(objectMapper.convertValue(mockRequestData, CompoundInterestRequestDto.class)).thenReturn(requestDto);
+        when(objectMapper.readValue(mockRequestData, CompoundInterestRequestDto.class)).thenReturn(requestDto);
 
         CompoundInterestRequestDto result = (CompoundInterestRequestDto) compoundInterestMapper.toDto(calculationRequestEntity);
 
         assertNotNull(result, "Resulting DTO should not be null");
-        verify(objectMapper, times(1)).convertValue(mockRequestData, CompoundInterestRequestDto.class);
+        verify(objectMapper, times(1)).readValue(mockRequestData, CompoundInterestRequestDto.class);
     }
 
     @Test
@@ -86,8 +86,6 @@ class CompoundInterestMapperTest {
     @Test
     void toDto_ShouldHandleNullRequestDataGracefully() {
         calculationRequestEntity.setRequestData(null);
-
         assertThrows(IllegalArgumentException.class, () -> compoundInterestMapper.toDto(calculationRequestEntity), "IllegalArgumentException should be thrown for null request data");
-
     }
 }

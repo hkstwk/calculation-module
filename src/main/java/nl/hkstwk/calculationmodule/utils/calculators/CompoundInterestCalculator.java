@@ -32,11 +32,12 @@ public class CompoundInterestCalculator {
 
         List<CompoundInterestDetailsDto> periodDetails = new ArrayList<>();
 
+
         for (int period = 1; period <= totalPeriods; period++) {
             log.debug("Processing period {}", period);
 
             if (requestDto.isDepositAtStart()) {
-                accumulatedValue = getAccumulatedValue(requestDto, period, accumulatedValue, monthlyDeposit);
+                accumulatedValue = getAccumulatedValue(requestDto, accumulatedValue, monthlyDeposit);
             }
 
             BigDecimal interestForPeriod = accumulatedValue.multiply(periodicRate).setScale(10, RoundingMode.HALF_UP);
@@ -46,17 +47,13 @@ public class CompoundInterestCalculator {
             log.debug("New accumulated value after interest: {}", accumulatedValue);
 
             if (!requestDto.isDepositAtStart()) {
-                accumulatedValue = getAccumulatedValue(requestDto, period, accumulatedValue, monthlyDeposit);
+                accumulatedValue = getAccumulatedValue(requestDto, accumulatedValue, monthlyDeposit);
             }
-
-            if (!requestDto.isDepositAtStart()) {
-                accumulatedValue = getAccumulatedValue(requestDto, period, accumulatedValue, monthlyDeposit);
-            }
-
+            
             if (requestDto.isIncludeDetails()) {
                 CompoundInterestDetailsDto.CompoundInterestDetailsDtoBuilder builder = CompoundInterestDetailsDto.builder()
                         .periodNumber(period)
-                        .initialDeposit(getInitialDepositForPeriod(accumulatedValue, interestForPeriod, requestDto))
+                        .initialDeposit(getInitialDepositForPeriod(accumulatedValue, interestForPeriod))
                         .interestForPeriod(interestForPeriod.setScale(2, RoundingMode.HALF_UP))
                         .accumulatedValue(accumulatedValue.setScale(2, RoundingMode.HALF_UP));
 
@@ -80,25 +77,15 @@ public class CompoundInterestCalculator {
         return response;
     }
 
-    private static BigDecimal getInitialDepositForPeriod(BigDecimal accumulatedValue, BigDecimal interestForPeriod, CompoundInterestRequestDto requestDto) {
-        BigDecimal result = accumulatedValue;
-
-        if (requestDto.isDepositAtStart()) {
-            result =  accumulatedValue.subtract(interestForPeriod).setScale(2, RoundingMode.HALF_UP);
-        } else {
-            result = accumulatedValue.subtract(interestForPeriod).subtract(requestDto.getMonthlyDeposit()).setScale(2, RoundingMode.HALF_UP);
-        }
-        return result;
+    private static BigDecimal getInitialDepositForPeriod(BigDecimal accumulatedValue, BigDecimal interestForPeriod) {
+             return accumulatedValue.subtract(interestForPeriod).setScale(2, RoundingMode.HALF_UP);
     }
 
-    private static BigDecimal getAccumulatedValue(CompoundInterestRequestDto requestDto, int period, BigDecimal accumulatedValue, BigDecimal monthlyDeposit) {
-        BigDecimal result = accumulatedValue;
+    private static BigDecimal getAccumulatedValue(CompoundInterestRequestDto requestDto, BigDecimal accumulatedValue, BigDecimal monthlyDeposit) {
         String moment = requestDto.isDepositAtStart() ? "start" : "end";
 
-        if ((period - 1) % (12 / requestDto.getCompoundingFrequency()) == 0) {
-            result = accumulatedValue.add(monthlyDeposit).setScale(10, RoundingMode.HALF_UP);
-            log.debug("New accumulated value after adding {} monthly deposit at {} of period: {}", monthlyDeposit, moment, result);
-        }
+        BigDecimal result = accumulatedValue.add(monthlyDeposit).setScale(10, RoundingMode.HALF_UP);
+        log.debug("New accumulated value after adding {} monthly deposit at {} of period: {}", monthlyDeposit, moment, result);
 
         return result;
     }
