@@ -16,7 +16,7 @@ spec:
         app: calculation-module
     spec:
       containers:
-      - image: hkstwk/calculation-module:latest
+      - image: hkstwk/calculation-module:v1.3.1
         name: calculation-module
         resources: {}
         env:
