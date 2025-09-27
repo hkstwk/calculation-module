@@ -1,3 +1,11 @@
+## [1.3.1](https://github.com/hkstwk/calculation-module/compare/v1.3.0...v1.3.1) (2025-09-27)
+
+
+### Bug Fixes
+
+* **deps:** update all maven dependencies ([8d46d7e](https://github.com/hkstwk/calculation-module/commit/8d46d7e1aa5462007537934f6f740cee2120e98e))
+* **it:** pinned mysql testcontainer version; added resource loader helper method ([a853fe3](https://github.com/hkstwk/calculation-module/commit/a853fe32925fc01e6b0cc0e2049859bfadf9b817))
+
 # [1.3.0](https://github.com/hkstwk/calculation-module/compare/v1.2.4...v1.3.0) (2025-03-18)
 
 
