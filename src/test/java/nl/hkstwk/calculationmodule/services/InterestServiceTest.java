@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.hkstwk.calculationmodule.dto.CompoundInterestRequestDto;
 import nl.hkstwk.calculationmodule.dto.CompoundInterestResponseDto;
+import nl.hkstwk.calculationmodule.utils.calculators.CompoundInterestCalculator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +19,8 @@ class InterestServiceTest {
 
     @BeforeEach
     void setUp() {
-        interestService = new InterestService(new ObjectMapper());
+        CompoundInterestCalculator compoundInterestCalculator = new CompoundInterestCalculator();
+        interestService = new InterestService(compoundInterestCalculator, new ObjectMapper());
     }
 
     @Test

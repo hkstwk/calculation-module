@@ -1,10 +1,10 @@
 package nl.hkstwk.calculationmodule.utils.calculators;
 
-import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import nl.hkstwk.calculationmodule.dto.CompoundInterestDetailsDto;
 import nl.hkstwk.calculationmodule.dto.CompoundInterestRequestDto;
 import nl.hkstwk.calculationmodule.dto.CompoundInterestResponseDto;
+import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -12,12 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
-@UtilityClass
+@Component
 public class CompoundInterestCalculator {
 
-    public static CompoundInterestResponseDto calculate(CompoundInterestRequestDto requestDto) {
-        log.info("Starting compound interest calculation for request: {}", requestDto);
-
+    public CompoundInterestResponseDto calculate(CompoundInterestRequestDto requestDto) {
         BigDecimal monthlyDeposit = requestDto.getMonthlyDeposit() != null ? requestDto.getMonthlyDeposit() : BigDecimal.ZERO;
         log.debug("Monthly deposit set to: {}", monthlyDeposit);
 
@@ -72,8 +70,6 @@ public class CompoundInterestCalculator {
                 .build();
 
         log.debug("Final accumulated amount: {}", response.getFinalAmount());
-        log.info("Finished compound interest calculation for request: {}", requestDto);
-
         return response;
     }
 

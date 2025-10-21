@@ -14,12 +14,13 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class InterestService {
+    private final CompoundInterestCalculator compoundInterestCalculator;
     private final ObjectMapper objectMapper;
 
     public CompoundInterestResponseDto compoundInterestCalculation(@Valid CompoundInterestRequestDto request) throws JsonProcessingException {
-        log.info("Start compound interest calculation for request: {}", request);
+//        log.info("Start compound interest calculation for request: {}", request);
 
-        CompoundInterestResponseDto result = CompoundInterestCalculator.calculate(request);
+        CompoundInterestResponseDto result = compoundInterestCalculator.calculate(request);
 
         log.info("Final accumulated value: {}", result.getFinalAmount());
         if (request.isIncludeDetails()) {

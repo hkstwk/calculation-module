@@ -14,6 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
 class CompoundInterestCalculatorTest {
+    private final CompoundInterestCalculator compoundInterestCalculator = new CompoundInterestCalculator();
 
     public static Stream<Arguments> compoundInterestCalculatorInput(){
         return Stream.of(
@@ -43,7 +44,7 @@ class CompoundInterestCalculatorTest {
                 .includeDetails(true)
                 .build();
 
-        CompoundInterestResponseDto responseDto = CompoundInterestCalculator.calculate(request);
+        CompoundInterestResponseDto responseDto = compoundInterestCalculator.calculate(request);
 
         assertThat(responseDto.getFinalAmount()).isEqualTo(BigDecimal.valueOf(accumulatedValue).setScale(2, RoundingMode.HALF_UP));
         assertThat(responseDto.getDetails()).hasSize(time*frequency);
