@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/hkstwk/calculation-module/compare/v1.3.1...v1.4.0) (2025-10-21)
+
+
+### Features
+
+* **aop:** implemented logging aspect for controllers, services, and calculators ([c850438](https://github.com/hkstwk/calculation-module/commit/c8504383e7f6e80cd03c874c3423a6ebe1ed9e49))
+
 ## [1.3.1](https://github.com/hkstwk/calculation-module/compare/v1.3.0...v1.3.1) (2025-09-27)
 
 
