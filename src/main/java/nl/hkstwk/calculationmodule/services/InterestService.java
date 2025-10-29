@@ -18,8 +18,6 @@ public class InterestService {
     private final ObjectMapper objectMapper;
 
     public CompoundInterestResponseDto compoundInterestCalculation(@Valid CompoundInterestRequestDto request) throws JsonProcessingException {
-//        log.info("Start compound interest calculation for request: {}", request);
-
         CompoundInterestResponseDto result = compoundInterestCalculator.calculate(request);
 
         log.info("Final accumulated value: {}", result.getFinalAmount());

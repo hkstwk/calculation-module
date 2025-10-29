@@ -10,8 +10,11 @@ import nl.hkstwk.calculationmodule.dto.CompoundInterestResponseDto;
 import nl.hkstwk.calculationmodule.entities.CalculationRequestEntity;
 import nl.hkstwk.calculationmodule.enums.CalculationTypeEnum;
 import nl.hkstwk.calculationmodule.mappers.CompoundInterestMapper;
+import nl.hkstwk.calculationmodule.model.CurrentUser;
 import nl.hkstwk.calculationmodule.services.CalculationRequestService;
 import nl.hkstwk.calculationmodule.services.InterestService;
+import nl.hkstwk.calculationmodule.services.UserService;
+import nl.hkstwk.calculationmodule.utils.UserUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -44,6 +47,9 @@ class InterestControllerTest {
     @Mock
     private CompoundInterestMapper compoundInterestMapper;
 
+    @Mock
+    private UserService userService;
+
     private Validator validator;
 
     @BeforeEach
@@ -63,18 +69,23 @@ class InterestControllerTest {
                 .finalAmount(BigDecimal.valueOf(104.00))
                 .build();
 
-        when(compoundInterestMapper.toEntity(requestDto, CalculationTypeEnum.COMPOUND_INTEREST)).thenReturn(expectedEntity);
-        when(calculationRequestService.saveRequest(expectedEntity)).thenReturn(expectedEntity);
-        when(interestService.compoundInterestCalculation(requestDto)).thenReturn(responseDto);
+        try (var mockedStatic = mockStatic(UserUtil.class)) {
+            CurrentUser currentUser = new CurrentUser("testuser", List.of("USER"), "testuser");
+            mockedStatic.when(UserUtil::fetchCurrentUserFromContext).thenReturn(currentUser);
 
-        ResponseEntity<CompoundInterestResponseDto> response = interestController.compoundInterestCalculation(requestDto);
+            when(compoundInterestMapper.toEntity(requestDto, CalculationTypeEnum.COMPOUND_INTEREST)).thenReturn(expectedEntity);
+            when(calculationRequestService.saveRequest(expectedEntity)).thenReturn(expectedEntity);
+            when(interestService.compoundInterestCalculation(requestDto)).thenReturn(responseDto);
 
-        verify(calculationRequestService, times(1)).saveRequest(any(CalculationRequestEntity.class));
-        verify(interestService, times(1)).compoundInterestCalculation(any(CompoundInterestRequestDto.class));
+            ResponseEntity<CompoundInterestResponseDto> response = interestController.compoundInterestCalculation(requestDto);
 
-        assertNotNull(response);
-        assertEquals(responseDto, response.getBody());
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+            verify(calculationRequestService, times(1)).saveRequest(any(CalculationRequestEntity.class));
+            verify(interestService, times(1)).compoundInterestCalculation(any(CompoundInterestRequestDto.class));
+
+            assertNotNull(response);
+            assertEquals(responseDto, response.getBody());
+            assertEquals(HttpStatus.OK, response.getStatusCode());
+        }
     }
 
     @Test
@@ -109,18 +120,22 @@ class InterestControllerTest {
                 ))
                 .build();
 
-        when(compoundInterestMapper.toEntity(requestDto, CalculationTypeEnum.COMPOUND_INTEREST_WITH_DETAILS)).thenReturn(expectedEntity);
-        when(calculationRequestService.saveRequest(expectedEntity)).thenReturn(expectedEntity);
-        when(interestService.compoundInterestCalculation(requestDto)).thenReturn(expectedResponseDto);
+        try (var mockedStatic = mockStatic(UserUtil.class)) {
+            CurrentUser currentUser = new CurrentUser("testuser", List.of("USER"), "testuser");
+            mockedStatic.when(UserUtil::fetchCurrentUserFromContext).thenReturn(currentUser);
+            when(compoundInterestMapper.toEntity(requestDto, CalculationTypeEnum.COMPOUND_INTEREST_WITH_DETAILS)).thenReturn(expectedEntity);
+            when(calculationRequestService.saveRequest(expectedEntity)).thenReturn(expectedEntity);
+            when(interestService.compoundInterestCalculation(requestDto)).thenReturn(expectedResponseDto);
 
-        ResponseEntity<CompoundInterestResponseDto> responseEntity = interestController.compoundInterestCalculation(requestDto);
+            ResponseEntity<CompoundInterestResponseDto> responseEntity = interestController.compoundInterestCalculation(requestDto);
 
-        verify(calculationRequestService, times(1)).saveRequest(any(CalculationRequestEntity.class));
-        verify(interestService, times(1)).compoundInterestCalculation(any(CompoundInterestRequestDto.class));
+            verify(calculationRequestService, times(1)).saveRequest(any(CalculationRequestEntity.class));
+            verify(interestService, times(1)).compoundInterestCalculation(any(CompoundInterestRequestDto.class));
 
-        assertNotNull(responseEntity);
-        assertEquals(expectedResponseDto, responseEntity.getBody());
-        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+            assertNotNull(responseEntity);
+            assertEquals(expectedResponseDto, responseEntity.getBody());
+            assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        }
     }
 
     @Test
