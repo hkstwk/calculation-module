@@ -14,7 +14,7 @@ import java.util.List;
 @ConfigurationProperties(prefix = "cors")
 public class CorsSettings {
     private boolean allowCredentials = true;
-    private List<String> allowedOrigins = new ArrayList<>(List.of("http://localhost:3000"));
+    private List<String> allowedOrigins = new ArrayList<>(List.of("http://localhost:3000", "http://localhost:4200"));
     private List<String> allowedMethods = new ArrayList<>(List.of("*"));
     private List<String> allowedHeaders = new ArrayList<>(List.of("*"));
     private long maxAge = 3600L;

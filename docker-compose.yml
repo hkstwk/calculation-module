@@ -2,14 +2,12 @@ services:
   calculation-module:
     image: mysql:latest
     container_name: calculation-module-mysql
-    platform: linux/amd64
+    platform: linux/arm64
     environment:
       MYSQL_ROOT_PASSWORD: test
       MYSQL_USER: test
       MYSQL_PASSWORD: test
       MYSQL_DATABASE: calculation-module-db
-#    volumes:
-#      - ~/Mysql/calculation-model-data:/var/lib/mysql  # Mounts a local directory for data persistence
     ports:
       - "3316:3306"
     networks:
