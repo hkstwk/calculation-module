@@ -1,15 +1,14 @@
 package nl.hkstwk.calculationmodule.repositories;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.hkstwk.calculationmodule.dto.CompoundInterestRequestDto;
 import nl.hkstwk.calculationmodule.entities.CalculationRequestEntity;
 import nl.hkstwk.calculationmodule.enums.CalculationTypeEnum;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import tools.jackson.databind.ObjectMapper;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ class CalculationRequestRepositoryTest {
 
     @Test
     void findAllByCalculationType() {
-        List<CalculationRequestEntity> calculationRequestEntities= new ArrayList<>();
+        List<CalculationRequestEntity> calculationRequestEntities = new ArrayList<>();
         calculationRequestEntities.add(createCalculationRequestEntity(BigDecimal.valueOf(100.00), BigDecimal.valueOf(0.04), 1, 1, CalculationTypeEnum.COMPOUND_INTEREST));
         calculationRequestEntities.add(createCalculationRequestEntity(BigDecimal.valueOf(200.00), BigDecimal.valueOf(0.03), 1, 2, CalculationTypeEnum.COMPOUND_INTEREST_WITH_DETAILS));
         calculationRequestEntities.add(createCalculationRequestEntity(BigDecimal.valueOf(300.00), BigDecimal.valueOf(0.02), 1, 3, CalculationTypeEnum.COMPOUND_INTEREST));
@@ -60,11 +59,7 @@ class CalculationRequestRepositoryTest {
 
         ObjectMapper objectMapper = new ObjectMapper();
         String requestData;
-        try {
-            requestData = objectMapper.writeValueAsString(requestDto);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
+        requestData = objectMapper.writeValueAsString(requestDto);
 
         CalculationRequestEntity entity = new CalculationRequestEntity();
         entity.setCalculationType(calculationType);

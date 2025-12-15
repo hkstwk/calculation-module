@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
@@ -12,6 +13,7 @@ import java.math.BigDecimal;
 
 @Data
 @Builder
+@AllArgsConstructor
 public class CompoundInterestRequestDto {
     @NotNull
     @Positive
@@ -19,14 +21,14 @@ public class CompoundInterestRequestDto {
     @PositiveOrZero
     @JsonInclude(JsonInclude.Include.NON_NULL)
     BigDecimal monthlyDeposit;
-    boolean depositAtStart;
+    Boolean depositAtStart;
     @NotNull
     BigDecimal nominalAnnualInterestRate;
     @NotNull
     @Min(1)
-    int compoundingFrequency;
+    Integer compoundingFrequency;
     @NotNull
     @Min(1)
-    int time;
-    boolean includeDetails;
+    Integer time;
+    Boolean includeDetails;
 }

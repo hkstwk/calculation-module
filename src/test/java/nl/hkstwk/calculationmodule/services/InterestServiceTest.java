@@ -1,12 +1,12 @@
 package nl.hkstwk.calculationmodule.services;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import nl.hkstwk.calculationmodule.dto.CompoundInterestRequestDto;
 import nl.hkstwk.calculationmodule.dto.CompoundInterestResponseDto;
 import nl.hkstwk.calculationmodule.utils.calculators.CompoundInterestCalculator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.ObjectMapper;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -24,7 +24,7 @@ class InterestServiceTest {
     }
 
     @Test
-    void testCompoundInterestWithDetailsCalculator() throws JsonProcessingException {
+    void testCompoundInterestWithDetailsCalculator() {
 
         CompoundInterestRequestDto request = CompoundInterestRequestDto.builder()
                 .time(1)
@@ -33,6 +33,7 @@ class InterestServiceTest {
                 .compoundingFrequency(1)
                 .nominalAnnualInterestRate(BigDecimal.valueOf(0.03))
                 .includeDetails(true)
+                .depositAtStart(true)
                 .build();
 
         CompoundInterestResponseDto responseDto = interestService.compoundInterestCalculation(request);

@@ -1,6 +1,5 @@
 package nl.hkstwk.calculationmodule.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -58,7 +57,7 @@ class InterestControllerTest {
     }
 
     @Test
-    void compoundInterestCalculation() throws JsonProcessingException {
+    void compoundInterestCalculation() {
         CompoundInterestRequestDto requestDto = getCompoundInterestRequestDto(1, false);
 
         UUID expectedUUID = UUID.randomUUID();
@@ -89,7 +88,7 @@ class InterestControllerTest {
     }
 
     @Test
-    void compoundInterestWithDetailsCalculation() throws JsonProcessingException {
+    void compoundInterestWithDetailsCalculation() {
         CompoundInterestRequestDto requestDto = getCompoundInterestRequestDto(12, true);
 
         UUID expectedUUID = UUID.randomUUID();

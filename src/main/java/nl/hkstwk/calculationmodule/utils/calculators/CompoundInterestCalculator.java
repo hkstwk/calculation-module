@@ -34,7 +34,7 @@ public class CompoundInterestCalculator {
         for (int period = 1; period <= totalPeriods; period++) {
             log.debug("Processing period {}", period);
 
-            if (requestDto.isDepositAtStart()) {
+            if (requestDto.getDepositAtStart()) {
                 accumulatedValue = getAccumulatedValue(requestDto, accumulatedValue, monthlyDeposit);
             }
 
@@ -44,11 +44,11 @@ public class CompoundInterestCalculator {
             accumulatedValue = accumulatedValue.add(interestForPeriod).setScale(10, RoundingMode.HALF_UP);
             log.debug("New accumulated value after interest: {}", accumulatedValue);
 
-            if (!requestDto.isDepositAtStart()) {
+            if (!requestDto.getDepositAtStart()) {
                 accumulatedValue = getAccumulatedValue(requestDto, accumulatedValue, monthlyDeposit);
             }
             
-            if (requestDto.isIncludeDetails()) {
+            if (requestDto.getIncludeDetails()) {
                 CompoundInterestDetailsDto.CompoundInterestDetailsDtoBuilder builder = CompoundInterestDetailsDto.builder()
                         .periodNumber(period)
                         .initialDeposit(getInitialDepositForPeriod(accumulatedValue, interestForPeriod))
@@ -78,7 +78,7 @@ public class CompoundInterestCalculator {
     }
 
     private static BigDecimal getAccumulatedValue(CompoundInterestRequestDto requestDto, BigDecimal accumulatedValue, BigDecimal monthlyDeposit) {
-        String moment = requestDto.isDepositAtStart() ? "start" : "end";
+        String moment = requestDto.getDepositAtStart() ? "start" : "end";
 
         BigDecimal result = accumulatedValue.add(monthlyDeposit).setScale(10, RoundingMode.HALF_UP);
         log.debug("New accumulated value after adding {} monthly deposit at {} of period: {}", monthlyDeposit, moment, result);
