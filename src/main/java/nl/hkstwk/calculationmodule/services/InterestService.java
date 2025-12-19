@@ -1,5 +1,7 @@
 package nl.hkstwk.calculationmodule.services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -7,7 +9,6 @@ import nl.hkstwk.calculationmodule.dto.CompoundInterestRequestDto;
 import nl.hkstwk.calculationmodule.dto.CompoundInterestResponseDto;
 import nl.hkstwk.calculationmodule.utils.calculators.CompoundInterestCalculator;
 import org.springframework.stereotype.Service;
-import tools.jackson.databind.ObjectMapper;
 
 @Slf4j
 @Service
@@ -16,7 +17,7 @@ public class InterestService {
     private final CompoundInterestCalculator compoundInterestCalculator;
     private final ObjectMapper objectMapper;
 
-    public CompoundInterestResponseDto compoundInterestCalculation(@Valid CompoundInterestRequestDto request) {
+    public CompoundInterestResponseDto compoundInterestCalculation(@Valid CompoundInterestRequestDto request) throws JsonProcessingException {
         CompoundInterestResponseDto result = compoundInterestCalculator.calculate(request);
 
         log.info("Final accumulated value: {}", result.getFinalAmount());

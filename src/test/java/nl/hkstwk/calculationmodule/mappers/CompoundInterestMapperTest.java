@@ -1,5 +1,8 @@
 package nl.hkstwk.calculationmodule.mappers;
 
+import com.fasterxml.jackson.core.JacksonException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.hkstwk.calculationmodule.dto.CompoundInterestRequestDto;
 import nl.hkstwk.calculationmodule.entities.CalculationRequestEntity;
 import nl.hkstwk.calculationmodule.enums.CalculationTypeEnum;
@@ -10,8 +13,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import tools.jackson.core.JacksonException;
-import tools.jackson.databind.ObjectMapper;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -38,7 +39,7 @@ class CompoundInterestMapperTest {
     }
 
     @Test
-    void toEntity_ShouldMapToEntity_WhenValidInput() {
+    void toEntity_ShouldMapToEntity_WhenValidInput() throws JsonProcessingException {
         String mockRequestData = "{\"principal\":1000,\"rate\":5,\"time\":2}";
         when(objectMapper.writeValueAsString(requestDto)).thenReturn(mockRequestData);
 
@@ -52,8 +53,8 @@ class CompoundInterestMapperTest {
     }
 
     @Test
-    void toEntity_ShouldThrowJacksonException_WhenObjectMapperFails()  {
-        when(objectMapper.writeValueAsString(requestDto)).thenThrow(JacksonException.class);
+    void toEntity_ShouldThrowJacksonException_WhenObjectMapperFails() throws JsonProcessingException {
+        when(objectMapper.writeValueAsString(requestDto)).thenThrow(JsonProcessingException.class);
 
         assertThrows(JacksonException.class, () -> compoundInterestMapper.toEntity(requestDto, calculationType), "JsonProcessingException should be thrown when ObjectMapper fails");
 
@@ -61,7 +62,7 @@ class CompoundInterestMapperTest {
     }
 
     @Test
-    void toDto_ShouldMapToDto_WhenValidInput()  {
+    void toDto_ShouldMapToDto_WhenValidInput() throws JsonProcessingException {
         String mockRequestData = "{\"principal\":1000,\"rate\":5,\"time\":2}";
         calculationRequestEntity.setRequestData(mockRequestData);
         when(objectMapper.readValue(mockRequestData, CompoundInterestRequestDto.class)).thenReturn(requestDto);

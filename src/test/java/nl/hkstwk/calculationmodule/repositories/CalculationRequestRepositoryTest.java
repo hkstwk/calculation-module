@@ -1,14 +1,15 @@
 package nl.hkstwk.calculationmodule.repositories;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.hkstwk.calculationmodule.dto.CompoundInterestRequestDto;
 import nl.hkstwk.calculationmodule.entities.CalculationRequestEntity;
 import nl.hkstwk.calculationmodule.enums.CalculationTypeEnum;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import tools.jackson.databind.ObjectMapper;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ class CalculationRequestRepositoryTest {
     private CalculationRequestRepository calculationRequestRepository;
 
     @Test
-    void findAllByCalculationType() {
+    void findAllByCalculationType() throws JsonProcessingException {
         List<CalculationRequestEntity> calculationRequestEntities = new ArrayList<>();
         calculationRequestEntities.add(createCalculationRequestEntity(BigDecimal.valueOf(100.00), BigDecimal.valueOf(0.04), 1, 1, CalculationTypeEnum.COMPOUND_INTEREST));
         calculationRequestEntities.add(createCalculationRequestEntity(BigDecimal.valueOf(200.00), BigDecimal.valueOf(0.03), 1, 2, CalculationTypeEnum.COMPOUND_INTEREST_WITH_DETAILS));
@@ -38,7 +39,7 @@ class CalculationRequestRepositoryTest {
     }
 
     @Test
-    void saveCompoundInterestRequest() {
+    void saveCompoundInterestRequest() throws JsonProcessingException {
         CalculationRequestEntity entity = createCalculationRequestEntity(BigDecimal.valueOf(100.00), BigDecimal.valueOf(0.04), 1, 1, CalculationTypeEnum.COMPOUND_INTEREST);
 
         CalculationRequestEntity savedEntity = calculationRequestRepository.save(entity);
@@ -49,7 +50,7 @@ class CalculationRequestRepositoryTest {
     }
 
     private static CalculationRequestEntity createCalculationRequestEntity(BigDecimal originalPrincipalSum, BigDecimal nominalAnnualInterestRate,
-                                                                           int compoundingFrequency, int time, CalculationTypeEnum calculationType) {
+                                                                           int compoundingFrequency, int time, CalculationTypeEnum calculationType) throws JsonProcessingException {
         CompoundInterestRequestDto requestDto = CompoundInterestRequestDto.builder()
                 .originalPrincipalSum(originalPrincipalSum)
                 .nominalAnnualInterestRate(nominalAnnualInterestRate)

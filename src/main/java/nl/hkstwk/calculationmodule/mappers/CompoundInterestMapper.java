@@ -1,12 +1,13 @@
 package nl.hkstwk.calculationmodule.mappers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import nl.hkstwk.calculationmodule.dto.CompoundInterestRequestDto;
 import nl.hkstwk.calculationmodule.entities.CalculationRequestEntity;
 import nl.hkstwk.calculationmodule.enums.CalculationTypeEnum;
 import nl.hkstwk.calculationmodule.exceptions.DtoNotFoundException;
 import org.springframework.stereotype.Component;
-import tools.jackson.databind.ObjectMapper;
 
 import java.util.Map;
 
@@ -28,7 +29,7 @@ public class CompoundInterestMapper {
 
     private final ObjectMapper objectMapper;
 
-    public CalculationRequestEntity toEntity(CompoundInterestRequestDto requestDto, CalculationTypeEnum calculationType){
+    public CalculationRequestEntity toEntity(CompoundInterestRequestDto requestDto, CalculationTypeEnum calculationType) throws JsonProcessingException {
         CalculationRequestEntity calculationRequestEntity = new CalculationRequestEntity();
 
         String data = objectMapper.writeValueAsString(requestDto);
@@ -38,7 +39,7 @@ public class CompoundInterestMapper {
         return calculationRequestEntity;
     }
 
-    public Object toDto(CalculationRequestEntity calculationRequestEntity) {
+    public Object toDto(CalculationRequestEntity calculationRequestEntity) throws JsonProcessingException {
         CalculationTypeEnum calculationType = calculationRequestEntity.getCalculationType();
         String requestData = calculationRequestEntity.getRequestData();
 

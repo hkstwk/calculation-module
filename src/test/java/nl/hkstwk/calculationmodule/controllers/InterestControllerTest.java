@@ -1,5 +1,6 @@
 package nl.hkstwk.calculationmodule.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -84,6 +85,8 @@ class InterestControllerTest {
             assertNotNull(response);
             assertEquals(responseDto, response.getBody());
             assertEquals(HttpStatus.OK, response.getStatusCode());
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -134,6 +137,8 @@ class InterestControllerTest {
             assertNotNull(responseEntity);
             assertEquals(expectedResponseDto, responseEntity.getBody());
             assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
         }
     }
 

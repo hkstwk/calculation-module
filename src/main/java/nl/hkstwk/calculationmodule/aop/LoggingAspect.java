@@ -31,6 +31,7 @@ public class LoggingAspect {
     @Around("controllerAllMethods() || serviceAllMethods() || calculatorAllMethods()")
     public Object logControllerMethod(ProceedingJoinPoint controllerMethod) throws Throwable {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
         CurrentUser currentUser = UserUtil.fetchCurrentUserFromContext();
         log.debug("Current User: {}", currentUser);
 
