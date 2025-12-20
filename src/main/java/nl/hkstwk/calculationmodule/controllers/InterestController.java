@@ -1,6 +1,5 @@
 package nl.hkstwk.calculationmodule.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +29,7 @@ public class InterestController {
     private final UserService userService;
 
     @PostMapping("/compound")
-    public ResponseEntity<CompoundInterestResponseDto> compoundInterestCalculation(@Valid @RequestBody CompoundInterestRequestDto compoundInterestRequestDto) throws JsonProcessingException {
+    public ResponseEntity<CompoundInterestResponseDto> compoundInterestCalculation(@Valid @RequestBody CompoundInterestRequestDto compoundInterestRequestDto) {
         CalculationTypeEnum calculationType = compoundInterestRequestDto.getIncludeDetails() ? CalculationTypeEnum.COMPOUND_INTEREST_WITH_DETAILS : CalculationTypeEnum.COMPOUND_INTEREST;
         userService.findCreateOrUpdateUser(UserUtil.fetchCurrentUserFromContext().getUsername());
         calculationRequestService.saveRequest(compoundInterestMapper.toEntity(compoundInterestRequestDto, calculationType));
