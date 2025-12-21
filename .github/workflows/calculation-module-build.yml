@@ -4,9 +4,16 @@ on:
   push:
     branches:
       - master
+      - feature/*
   pull_request:
     branches:
       - master
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to run the workflow on'
+        required: true
+        default: 'master'
 
 permissions:
   contents: write
@@ -18,11 +25,13 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.inputs.branch || github.ref }}
 
-      - name: Set up JDK 21
+      - name: Set up JDK 25
         uses: actions/setup-java@v5
         with:
-          java-version: '21'
+          java-version: '25'
           distribution: "corretto"
           cache: maven
 
