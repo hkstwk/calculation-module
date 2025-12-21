@@ -1,3 +1,17 @@
+# [1.5.0](https://github.com/hkstwk/calculation-module/compare/v1.4.0...v1.5.0) (2025-12-21)
+
+
+### Bug Fixes
+
+* **deps:** update all maven dependencies ([f223c4e](https://github.com/hkstwk/calculation-module/commit/f223c4efe84223d8e8090316cdb06a741614ecb5))
+* **deps:** update all maven dependencies to v3.5.8 ([a137305](https://github.com/hkstwk/calculation-module/commit/a1373050c9ff7cc25ba0abe7593c7732d4bc8d8e))
+
+
+### Features
+
+* **build:** enhance Maven and Docker configurations, expand CORS settings ([38025c1](https://github.com/hkstwk/calculation-module/commit/38025c15e7f374c6cd5d9f621841a88e0e566707))
+* **security:** integrated Spring Security with JWT-based authentication ([b4a7b19](https://github.com/hkstwk/calculation-module/commit/b4a7b19ca6a5c7e4cc6958c151fb5c6f188b3d17))
+
 # [1.4.0](https://github.com/hkstwk/calculation-module/compare/v1.3.1...v1.4.0) (2025-10-21)
 
 
