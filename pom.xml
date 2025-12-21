@@ -157,6 +157,7 @@
             <!-- added to manage lombok annotation processing -->
             <!-- this was necessary upon switching to java 25 -->
             <!-- just the latest lombok dependency wasn't working with java 25 -->
+            <!-- and resulted in sudden "symbol not found" errors for every log.info statement -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
