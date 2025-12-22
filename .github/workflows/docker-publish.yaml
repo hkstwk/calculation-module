@@ -10,27 +10,21 @@ on:
         required: true
 
 jobs:
-  build-and-push:
+  build-jar:
     runs-on: ubuntu-latest
-
+    outputs:
+      version: ${{ steps.get_version.outputs.version }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-        with:
-          submodules: true
+      - uses: actions/checkout@v6
 
-      - name: Extract version from release tag or manual input
+      - name: Get version
+        id: get_version
         run: |
-          if [ -z "${{ github.event.inputs.version }}" ]; then
-            if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
-              echo "VERSION=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-            else
-              echo "Error: GITHUB_REF is not a tag." >&2
-              exit 1
-            fi
-          else
-            echo "VERSION=${{ github.event.inputs.version }}" >> $GITHUB_ENV
+          VERSION=${{ github.event.inputs.version }}
+          if [ -z "$VERSION" ]; then
+            VERSION=${GITHUB_REF#refs/tags/}
           fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Set up JDK 25
         uses: actions/setup-java@v5
@@ -39,11 +33,43 @@ jobs:
           distribution: "corretto"
           cache: maven
 
-      - name: Debug workspace contents
-        run: ls -la
+      - name: Build with Maven
+        run: |
+          mvn -B clean package -DskipTests
+          # Use find to pick the exact executable JAR:
+          # - Maxdepth 1: stay in target/
+          # - ! -name "*.original": ignore the backup jar
+          # - ! -name "*-sources.jar": ignore source jars
+          # - ! -name "*-javadoc.jar": ignore documentation jars
+          EXECUTABLE_JAR=$(find target -maxdepth 1 -name "calculation-module-*.jar" ! -name "*.original" ! -name "*-sources.jar" ! -name "*-javadoc.jar")
 
-      - name: Build project
-        run: mvn -B clean package -DskipTests
+          echo "Found executable JAR: $EXECUTABLE_JAR"
+          mv "$EXECUTABLE_JAR" target/app.jar
+
+      - name: Upload JAR
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-jar
+          path: target/*.jar
+          retention-days: 1
+
+  publish-docker:
+    needs: build-jar
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Download JAR
+        uses: actions/download-artifact@v4
+        with:
+          name: app-jar
+          path: target/
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
@@ -51,13 +77,12 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Enable Docker BuildKit
-        run: export DOCKER_BUILDKIT=1
-
-      - name: Build Docker image
-        run: docker build -f Dockerfile -t hkstwk/calculation-module:${{ env.VERSION }} -t hkstwk/calculation-module:latest .
-
-      - name: Push Docker image
-        run: |
-          docker push hkstwk/calculation-module:${{ env.VERSION }}
-          docker push hkstwk/calculation-module:latest
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            hkstwk/calculation-module:${{ needs.build-jar.outputs.version }}
+            hkstwk/calculation-module:latest

@@ -1,15 +1,16 @@
-# Use an OpenJDK 21 base image
-FROM amazoncorretto:25.0.1 AS build
+# Use the JRE version for a smaller, faster production image
+# Amazon Corretto provides multi-arch images by default
+FROM amazoncorretto:25-alpine
 
 # Set the working directory
 WORKDIR /app
 
-# Copy the JAR file (pass the filename dynamically)
-ARG JAR_FILE=target/calculation-module-0.0.1-SNAPSHOT.jar
-COPY ${JAR_FILE} app.jar
+# Final, safe, explicit copy
+# check docker.publish.yaml for creation artefact with fixed name `target/app.jar`
+COPY target/app.jar app.jar
 
-# Expose application port (if applicable)
+# Expose application port
 EXPOSE 8080
 
-# Run the JAR file
+# Run the JAR file with basic memory optimizations for containers
 ENTRYPOINT ["java", "-jar", "app.jar"]
