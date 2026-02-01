@@ -1,6 +1,6 @@
 # Use the JRE version for a smaller, faster production image
 # Amazon Corretto provides multi-arch images by default
-FROM amazoncorretto:25-alpine
+FROM amazoncorretto:25.0.2-alpine
 
 # Set the working directory
 WORKDIR /app
