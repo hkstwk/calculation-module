@@ -54,4 +54,9 @@
             <column name="name" type="varchar(500)"/>
         </createTable>
     </changeSet>
+
+    <changeSet id="1771102192095-1" author="Harm Kolvoort">
+        <renameTable oldTableName="user" newTableName="users"/>
+    </changeSet>
+
 </databaseChangeLog>
