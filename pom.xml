@@ -86,11 +86,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-oauth2-resource-server-test</artifactId>-->
-<!--            <scope>test</scope>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.springframework.boot</groupId>-->
+        <!--            <artifactId>spring-boot-starter-oauth2-resource-server-test</artifactId>-->
+        <!--            <scope>test</scope>-->
+        <!--        </dependency>-->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -153,6 +153,25 @@
     </dependencies>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>3.6.1</version>
+                    <executions>
+                        <execution>
+                            <id>set-mockito-agent-property</id>
+                            <goals>
+                                <goal>properties</goal>
+                            </goals>
+                            <phase>initialize</phase>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
         <plugins>
             <!-- added to manage lombok annotation processing -->
             <!-- this was necessary upon switching to java 25 -->
@@ -173,11 +192,11 @@
                 </configuration>
             </plugin>
 
-           <!--
-           build-helper-maven-plugin ⬇️ helper plugin to add custom directories to the build.
-           Adds src/it/java as a test source folder and src/it/resources as a test resource folder.
-           Ensures integration test files are compiled and available during the test lifecycle.
-           -->
+            <!--
+            build-helper-maven-plugin ⬇️ helper plugin to add custom directories to the build.
+            Adds src/it/java as a test source folder and src/it/resources as a test resource folder.
+            Ensures integration test files are compiled and available during the test lifecycle.
+            -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
