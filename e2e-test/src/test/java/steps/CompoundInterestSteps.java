@@ -10,6 +10,7 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import support.AngularContainer;
 import support.BackendContainer;
+import support.DatabaseContainer;
 import support.PlaywrightSupport;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -19,6 +20,7 @@ public class CompoundInterestSteps {
     @Before
     public void setup() {
         BackendContainer.ensureRunning();
+        DatabaseContainer.ensureRunning();
         AngularContainer.ensureRunning();
     }
 

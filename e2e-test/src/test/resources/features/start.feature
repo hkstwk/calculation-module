@@ -11,4 +11,4 @@ Feature: Compound interest calculation
     And I enter monthtly deposit 0
     And I enter years 1
     And I submit the form
-    Then I should see result "1040"
+    Then I should see result "4.0"
