@@ -18,7 +18,6 @@ gitGraph
     commit id: "5" tag: "v1.1"
 ```
 
-
 ```zsh
 docker network create e2e-network
 ```
@@ -36,6 +35,7 @@ docker run \
   mysql:latest
 ```
 
+
 ```zsh
 docker run \
     --name calculation-backend-e2e \
@@ -48,32 +48,39 @@ docker run \
     hkstwk/calculation-backend:local
 ```
 
+## Start existing e2e containers in this specific order
 ```zsh
-docker start calculation-backend-e2e
+docker start calculation-db-e2e 
+docker start calculation-backend-e2e 
+docker start calculation-frontend-e2e 
 ```
 
+## Run new e2e frontend container
 ```zsh
 docker run \
-  --name calculation-frontend-e2e \
-  -p 4200:4200 \
-  calculation-frontend:e2e
+    --name calculation-frontend-e2e \
+    --network e2e-network \
+    -p 4200:8080 \
+    calculation-frontend:e2e
 ```
 
+## Stop containers
+```zsh
+docker stop calculation-frontend-e2e
+docker stop calculation-backend-e2e
+docker stop calculation-db-e2e
+```
+
+## Remove containers
+```zsh
+docker rm calculation-frontend-e2e
+docker rm calculation-backend-e2e
+docker rm calculation-db-e2e
+```
+
+## Build e2e docker image without using cache
 ```zsh
 docker build --no-cache \
   --build-arg CONFIG=e2e \
   -t calculation-frontend:e2e .
-```
-
-```zsh
-docker run \
---name calculation-frontend-e2e \
---network e2e-network \
--p 4200:8080 \
-calculation-frontend:e2e
-```
-
-```zsh
-docker stop calculation-frontend-e2e
-docker rm calculation-frontend-e2e
 ```
