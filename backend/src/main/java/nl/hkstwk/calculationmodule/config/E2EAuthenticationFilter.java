@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -25,8 +26,8 @@ public class E2EAuthenticationFilter extends OncePerRequestFilter {
 
         // Maak een lege token die door de provider wordt ingevuld
         Authentication authRequest = new E2EAuthenticationToken(
-                "ignored",
-                List.of()
+                "e2e-user",
+                List.of(new SimpleGrantedAuthority("ROLE_ADMIN"))
         );
 
         Authentication authResult = SecurityContextHolder.getContext().getAuthentication();

@@ -79,4 +79,19 @@ public class CompoundInterestSteps {
         assertThat(text).isEqualTo(expected);
     }
 
+    @Then("I should see the final amount {string}")
+    public void theFinalAmountShouldBe(String expected) {
+        Page page = PlaywrightSupport.page();
+
+        String raw = page.textContent("mat-card-title");
+        String result = raw.replace("Final Amount:", "").trim();
+
+        System.out.println("UI finalAmount = " + result);
+        System.out.println("Expected       = " + expected);
+
+        assertThat(result)
+                .as("finalAmount mismatch in UI")
+                .isEqualTo(expected);
+    }
+
 }

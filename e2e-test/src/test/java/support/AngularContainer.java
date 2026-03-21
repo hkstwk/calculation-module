@@ -5,7 +5,7 @@ import org.testcontainers.containers.GenericContainer;
 public class AngularContainer {
 
     private static final GenericContainer<?> angular =
-            new GenericContainer<>("calculation-frontend-server-e2e:local")
+            new GenericContainer<>("calculation-frontend:e2e")
                     .withExposedPorts(8080);
 
     static {

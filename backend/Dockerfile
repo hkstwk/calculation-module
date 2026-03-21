@@ -7,7 +7,7 @@ WORKDIR /app
 
 # Final, safe, explicit copy
 # check docker.publish.yaml for creation artefact with fixed name `target/app.jar`
-COPY target/app.jar app.jar
+COPY target/calculation-backend-0.0.1-SNAPSHOT.jar app.jar
 
 # Expose application port
 EXPOSE 8080
