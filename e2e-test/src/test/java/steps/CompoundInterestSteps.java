@@ -19,8 +19,8 @@ public class CompoundInterestSteps {
 
     @Before
     public void setup() {
-        BackendContainer.ensureRunning();
         DatabaseContainer.ensureRunning();
+        BackendContainer.ensureRunning();
         AngularContainer.ensureRunning();
     }
 
