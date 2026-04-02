@@ -11,8 +11,8 @@ public class PlaywrightSupport {
     private static final Playwright playwright = Playwright.create();
     private static final Browser browser = playwright.chromium().launch(
             new BrowserType.LaunchOptions()
-                    .setHeadless(false)
-                    .setSlowMo(200)
+                    .setHeadless(Boolean.parseBoolean(System.getProperty("playwright.headless", "true")))
+                    .setSlowMo(Integer.parseInt(System.getProperty("playwright.slowmo", "0")))
     );
 
     private static BrowserContext context;
