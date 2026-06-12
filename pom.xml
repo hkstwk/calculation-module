@@ -39,6 +39,16 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+            <dependency>
+                <groupId>com.bucket4j</groupId>
+                <artifactId>bucket4j_jdk17-core</artifactId>
+                <version>8.18.0</version>
+            </dependency>
+            <dependency>
+                <groupId>com.bucket4j</groupId>
+                <artifactId>bucket4j_jdk17-mysql</artifactId>
+                <version>8.18.0</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 </project>

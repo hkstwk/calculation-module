@@ -10,8 +10,10 @@ import nl.hkstwk.calculationmodule.entities.CalculationRequestEntity;
 import nl.hkstwk.calculationmodule.enums.CalculationTypeEnum;
 import nl.hkstwk.calculationmodule.mappers.CompoundInterestMapper;
 import nl.hkstwk.calculationmodule.model.CurrentUser;
+import nl.hkstwk.calculationmodule.services.BucketService;
 import nl.hkstwk.calculationmodule.services.CalculationRequestService;
 import nl.hkstwk.calculationmodule.services.InterestService;
+import nl.hkstwk.calculationmodule.services.OrderService;
 import nl.hkstwk.calculationmodule.services.UserService;
 import nl.hkstwk.calculationmodule.utils.UserUtil;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,8 +42,6 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class InterestControllerTest {
-    @InjectMocks
-    private InterestController interestController;
 
     @Mock
     private InterestService interestService;
@@ -54,6 +54,15 @@ class InterestControllerTest {
 
     @Mock
     private UserService userService;
+
+    @Mock
+    private OrderService orderService;
+
+    @Mock
+    private BucketService bucketService;
+
+    @InjectMocks
+    private InterestController interestController;
 
     private Validator validator;
 

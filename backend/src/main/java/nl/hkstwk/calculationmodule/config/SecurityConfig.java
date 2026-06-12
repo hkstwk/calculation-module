@@ -27,7 +27,7 @@ public class SecurityConfig {
         log.info("The real security configuration");
         return http
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/interest/**").hasRole("ADMIN")
+                        .requestMatchers("/interest/compound").hasRole("ADMIN")
                         .anyRequest().permitAll())
                 .cors(Customizer.withDefaults())
                 .oauth2ResourceServer(oauth2 -> oauth2

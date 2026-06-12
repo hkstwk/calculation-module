@@ -59,4 +59,14 @@
         <renameTable oldTableName="user" newTableName="users"/>
     </changeSet>
 
+    <changeSet id="1771102192095-2" author="Harm Kolvoort">
+        <createTable tableName="bucket">
+            <column name="id" type="varchar(255)">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="state" type="blob" />
+            <column name="expires_at" type="bigint"/>
+        </createTable>
+    </changeSet>
+
 </databaseChangeLog>
