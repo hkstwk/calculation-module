@@ -16,7 +16,7 @@ services:
     image: hkstwk/calculation-module:latest
     container_name: calculation-module-app
     environment:
-      - SPRING_PROFILES_ACTIVE=dev
+      - SPRING_PROFILES_ACTIVE=dev,e2e
       - SPRING_DATASOURCE_URL=jdbc:mysql://calculation-module:3306/calculation-module-db
     ports:
       - "8081:8080"
